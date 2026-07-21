@@ -26,8 +26,8 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60" />
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-primary-fixed-dim/10 blur-3xl animate-float" />
-        <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-secondary-fixed-dim/10 blur-3xl animate-float-delayed" />
+        <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-primary-fixed-dim/10 blur-3xl animate-float" />
+        <div className="absolute top-10 -right-20 w-96 h-96 rounded-full bg-secondary-fixed-dim/8 blur-3xl animate-float-delayed" />
       </div>
 
       <div className="relative h-full flex flex-col justify-center items-center text-center px-6 max-w-[1400px] mx-auto">
@@ -72,15 +72,9 @@ export default function HeroSection() {
         >
           <Link
             href="/produk"
-            className="bg-primary hover:bg-primary-container text-white px-8 py-3 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-primary/20 active:scale-95"
+            className="bg-primary hover:bg-primary-container text-white px-10 py-3 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-primary/20 active:scale-95"
           >
             Belanja Sekarang
-          </Link>
-          <Link
-            href="/peta"
-            className="bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-white/20 px-8 py-3 rounded-full text-sm font-semibold transition-all active:scale-95"
-          >
-            Lihat Peta UMKM
           </Link>
         </motion.div>
       </div>

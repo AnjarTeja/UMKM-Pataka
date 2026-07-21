@@ -60,13 +60,13 @@ export default function Testimonials() {
         </p>
       </motion.div>
 
-      <div className="max-w-3xl mx-auto">
-        <div className="relative bg-surface-container-lowest rounded-2xl p-8 md:p-12 clay-shadow border border-outline-variant/20">
-          <div className="absolute top-4 right-4 text-primary-fixed-dim/20">
-            <Quote className="h-20 w-20" />
+      <div className="max-w-5xl mx-auto">
+        <div className="relative bg-surface-container-lowest rounded-2xl p-8 md:p-14 clay-shadow border border-outline-variant/20">
+          <div className="absolute top-4 right-4 text-primary-fixed-dim/15">
+            <Quote className="h-28 w-28" />
           </div>
 
-          <div className="relative z-10 min-h-[220px] flex flex-col justify-center">
+          <div className="relative z-10 min-h-[260px] flex flex-col justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={current}
@@ -80,24 +80,24 @@ export default function Testimonials() {
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <Star
                       key={i}
-                      className="h-4 w-4 fill-yellow-500 text-yellow-500"
+                      className="h-5 w-5 fill-yellow-500 text-yellow-500"
                     />
                   ))}
                 </div>
 
-                <p className="text-on-surface text-base leading-relaxed italic">
+                <p className="text-on-surface text-lg leading-relaxed italic">
                   &ldquo;{t.text}&rdquo;
                 </p>
 
-                <div className="flex items-center gap-3 pt-2">
-                  <div className="h-10 w-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-heading font-bold text-sm">
+                <div className="flex items-center gap-4 pt-4">
+                  <div className="h-12 w-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-heading font-bold text-base">
                     {t.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="font-heading text-sm font-semibold text-primary">
+                    <p className="font-heading text-base font-semibold text-primary">
                       {t.name}
                     </p>
-                    <p className="text-xs text-on-surface-variant">{t.role}</p>
+                    <p className="text-sm text-on-surface-variant">{t.role}</p>
                   </div>
                 </div>
               </motion.div>
