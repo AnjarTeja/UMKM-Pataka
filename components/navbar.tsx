@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Search, Menu, X, Home, Store, Package, MapPin, HelpCircle } from "lucide-react"
+import { Menu, X, Home, Store, Package, MapPin, HelpCircle } from "lucide-react"
 
 const navLinks = [
   { label: "Beranda", href: "/", icon: Home },
@@ -64,15 +64,18 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative hidden lg:block w-64 xl:w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 h-4 w-4" />
-            <input
-              type="text"
-              placeholder="Cari produk..."
-              className="w-full bg-white/15 border border-white/20 rounded-full py-1.5 pl-9 pr-3 text-sm focus:ring-2 focus:ring-white/40 focus:border-white/40 transition-all outline-none text-white placeholder:text-white/40"
-            />
+          <div className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-white/10">
+            <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center text-[10px] font-bold text-white/60">
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </div>
+            <span className="text-xs font-medium text-white/80 leading-tight">
+              <span className="block">Desa</span>
+              <span className="block -mt-0.5">Patakaharja</span>
+            </span>
           </div>
-
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 text-white/70 hover:text-white transition-all"

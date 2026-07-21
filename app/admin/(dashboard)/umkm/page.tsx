@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { Plus, Search, StoreIcon, Edit3, Trash2, MapPin, Loader2 } from "lucide-react"
+import { Plus, StoreIcon, Edit3, Trash2, MapPin, Loader2 } from "lucide-react"
 import { PageTransition, SlideIn, StaggerRow, ModalBackdrop } from "@/components/admin-page-transition"
 import { AnimatePresence } from "framer-motion"
 import { toast } from "sonner"
@@ -24,22 +24,17 @@ interface Store {
 
 export default function AdminStoresPage() {
   const [stores, setStores] = useState<Store[]>([])
-  const [search, setSearch] = useState("")
-  const [searchInput, setSearchInput] = useState("")
   const [loading, setLoading] = useState(true)
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const fetchingRef = useRef(0)
 
   useEffect(() => {
     const id = ++fetchingRef.current
-    const params = new URLSearchParams()
-    if (search) params.set("search", search)
-
-    fetch(`/api/admin/umkm?${params}`)
+    fetch(`/api/admin/umkm`)
       .then((r) => r.json())
       .then((data) => { if (id === fetchingRef.current) { setStores(data); setLoading(false) } })
       .catch(() => { if (id === fetchingRef.current) setLoading(false) })
-  }, [search])
+  }, [])
 
   const handleDelete = async (id: string) => {
     try {
@@ -47,16 +42,10 @@ export default function AdminStoresPage() {
       if (res.ok) {
         toast.success("UMKM dinonaktifkan")
         setDeleteId(null)
-        setSearch((s) => s)
       } else {
         toast.error("Gagal menonaktifkan UMKM")
       }
     } catch { toast.error("Terjadi kesalahan") }
-  }
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSearch(searchInput)
   }
 
   return (
@@ -76,21 +65,6 @@ export default function AdminStoresPage() {
               Tambah UMKM
             </Link>
           </div>
-        </SlideIn>
-
-        <SlideIn>
-          <form onSubmit={handleSearch} className="mb-6">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <input
-                type="text"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Cari UMKM..."
-                className="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all"
-              />
-            </div>
-          </form>
         </SlideIn>
 
         <SlideIn>
