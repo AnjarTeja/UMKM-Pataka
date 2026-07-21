@@ -19,11 +19,6 @@ const images = [
     alt: "Hasil kerajinan tanah liat",
     label: "Karya Unggulan UMKM",
   },
-  {
-    src: "https://images.unsplash.com/photo-1602874801007-bd1d3c3e6a8f?w=600&q=80",
-    alt: "Produk anyaman bambu",
-    label: "Anyaman & Kriya Bambu",
-  },
 ]
 
 const container = {

@@ -18,7 +18,9 @@ export default async function AdminLayout({
   return (
     <div className="flex min-h-screen bg-[#f5f5f7]">
       <AdminSidebar />
-      <main className="flex-1">{children}</main>
+      <div className="flex flex-col flex-1 min-h-screen">
+        <main className="flex-1">{children}</main>
+      </div>
       <Toaster
         position="top-right"
         richColors

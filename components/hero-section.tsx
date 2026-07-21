@@ -8,26 +8,26 @@ export default function HeroSection() {
   const [offsetY, setOffsetY] = useState(0)
 
   useEffect(() => {
-    const onScroll = () => setOffsetY(window.scrollY * 0.4)
+    const onScroll = () => setOffsetY(window.scrollY * 0.3)
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
   return (
-    <section className="relative h-[500px] overflow-hidden">
+    <section className="relative h-[500px] md:h-[540px] overflow-hidden">
       <div
         className="absolute inset-0 bg-cover bg-center scale-110"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=1600&q=80')",
+            "url('/images/gerabah.png')",
           transform: `translateY(${offsetY}px) scale(1.1)`,
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/60" />
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-primary-fixed-dim/10 blur-3xl animate-float" />
-        <div className="absolute top-10 -right-20 w-96 h-96 rounded-full bg-secondary-fixed-dim/8 blur-3xl animate-float-delayed" />
+        <div className="absolute top-48 -left-16 w-72 h-72 rounded-full bg-primary-fixed-dim/12 blur-3xl animate-float" />
+        <div className="absolute top-96 -right-10 w-80 h-80 rounded-full bg-secondary-fixed-dim/8 blur-3xl animate-float-delayed" />
       </div>
 
       <div className="relative h-full flex flex-col justify-center items-center text-center px-6 max-w-[1400px] mx-auto">
@@ -58,7 +58,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" as const }}
-          className="text-white/80 text-lg max-w-xl mb-8"
+          className="text-white/75 text-lg max-w-xl mb-6"
         >
           Eksplorasi keindahan kerajinan tangan UMKM Desa Patakaharja yang
           memadukan teknik tradisional dengan estetika kontemporer.
@@ -79,7 +79,7 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent pointer-events-none" />
     </section>
   )
 }
