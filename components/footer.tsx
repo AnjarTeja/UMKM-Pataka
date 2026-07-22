@@ -1,6 +1,15 @@
+"use client"
+
 import { Share2, Mail, Heart } from "lucide-react"
+import { usePathname } from "next/navigation"
 
 export default function Footer() {
+  const pathname = usePathname()
+
+  if (pathname?.startsWith("/admin")) {
+    return null
+  }
+
   return (
     <footer className="w-full bg-primary mt-16">
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center py-12 px-6 gap-8">

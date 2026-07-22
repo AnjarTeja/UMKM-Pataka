@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { Manrope, Work_Sans } from "next/font/google"
-import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
+import PublicLayoutWrapper from "@/components/public-layout-wrapper"
 import "./globals.css"
 
 const manrope = Manrope({
@@ -34,10 +33,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-on-surface font-sans">
-        <Navbar />
-        <main className="flex-1 pt-16">{children}</main>
-        <Footer />
+        <PublicLayoutWrapper>{children}</PublicLayoutWrapper>
       </body>
     </html>
   )
 }
+

@@ -3,8 +3,9 @@
 import { Suspense, useState } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
+import Link from "next/link"
 import { motion } from "framer-motion"
-import { Store, Eye, EyeOff, Sparkles } from "lucide-react"
+import { Store, Eye, EyeOff, Sparkles, ArrowLeft } from "lucide-react"
 
 function LoginForm() {
   const router = useRouter()
@@ -114,6 +115,10 @@ function LoginForm() {
 export default function AdminLoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#341452] via-[#4b2c69] to-[#341452] p-6 relative overflow-hidden">
+      <Link href="/" className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 text-white/50 hover:text-white transition-colors z-20 text-sm font-medium bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg backdrop-blur-md border border-white/5">
+        <ArrowLeft className="h-4 w-4" />
+        Kembali ke Web
+      </Link>
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{

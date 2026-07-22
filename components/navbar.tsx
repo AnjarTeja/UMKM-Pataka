@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, Home, Store, Package, MapPin, HelpCircle } from "lucide-react"
+import { Menu, X, Home, Store, Package, MapPin, HelpCircle, LogIn } from "lucide-react"
 
 const navLinks = [
   { label: "Beranda", href: "/", icon: Home },
@@ -29,6 +29,10 @@ export default function Navbar() {
     setMobileOpen(false)
   }, [pathname])
 
+  if (pathname?.startsWith("/admin")) {
+    return null
+  }
+
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-700 ease-in-out ${
@@ -39,7 +43,14 @@ export default function Navbar() {
     >
       <div className="max-w-[1400px] mx-auto flex items-center justify-between h-16 px-6">
         <div className="flex items-center gap-8">
-          <Link href="/" className="font-heading text-xl font-bold text-white">
+          <Link href="/" className="flex items-center gap-2.5 font-heading text-xl font-bold text-white">
+            <Image
+              src="/images/Logo-Kabupaten-Ciamis.png"
+              alt="Logo Kabupaten Ciamis"
+              width={32}
+              height={32}
+              className="object-contain"
+            />
             Patakaharja
           </Link>
           <div className="hidden md:flex items-center gap-1">
@@ -65,19 +76,13 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-white/10">
-            <Image
-              src="/images/Logo-Kabupaten-Ciamis.png"
-              alt="Logo Kabupaten Ciamis"
-              width={28}
-              height={28}
-              className="rounded-md object-cover"
-            />
-            <span className="text-xs font-medium text-white/80 leading-tight">
-              <span className="block">Desa</span>
-              <span className="block -mt-0.5">Patakaharja</span>
-            </span>
-          </div>
+          <Link
+            href="/admin/login"
+            className="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/10 text-sm font-medium text-white hover:bg-white/20 transition-all"
+          >
+            <LogIn className="h-4 w-4" />
+            Login
+          </Link>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 text-white/70 hover:text-white transition-all"
@@ -105,12 +110,23 @@ export default function Navbar() {
                     ? "text-white bg-white/20"
                     : "text-white/70 hover:text-white hover:bg-white/10"
                 }`}
+                onClick={() => setMobileOpen(false)}
               >
                 <Icon className="h-4 w-4" />
                 {link.label}
               </Link>
             )
           })}
+          <div className="pt-2 mt-2 border-t border-white/10">
+            <Link
+              href="/admin/login"
+              className="flex items-center gap-3 w-full px-4 py-2.5 rounded-lg text-sm font-medium text-white bg-white/10 hover:bg-white/20 transition-all"
+              onClick={() => setMobileOpen(false)}
+            >
+              <LogIn className="h-4 w-4" />
+              Login Admin
+            </Link>
+          </div>
         </div>
       </div>
     </nav>
