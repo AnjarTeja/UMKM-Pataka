@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu, X, Home, Store, Package, MapPin, HelpCircle } from "lucide-react"
 
@@ -65,12 +66,13 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3">
           <div className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-white/10">
-            <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center text-[10px] font-bold text-white/60">
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
-              </svg>
-            </div>
+            <Image
+              src="/images/Logo-Kabupaten-Ciamis.png"
+              alt="Logo Kabupaten Ciamis"
+              width={28}
+              height={28}
+              className="rounded-md object-cover"
+            />
             <span className="text-xs font-medium text-white/80 leading-tight">
               <span className="block">Desa</span>
               <span className="block -mt-0.5">Patakaharja</span>
