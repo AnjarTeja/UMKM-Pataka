@@ -4,11 +4,13 @@ import { MessageCircle } from "lucide-react"
 import { motion } from "framer-motion"
 
 export interface ProductData {
+  id?: string
   category: string
   name: string
   price: string
   image: string
   store?: string
+  storeId?: string
 }
 
 interface Props {
@@ -21,6 +23,18 @@ function waOrder(product: ProductData) {
     `Halo, saya tertarik dengan produk *${product.name}* (${product.category}) seharga ${product.price}. Apakah masih tersedia?`
   )
   window.open(`https://wa.me/6281234567890?text=${msg}`, "_blank")
+
+  if (product.id && product.storeId) {
+    fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        productId: product.id,
+        storeId: product.storeId,
+        quantity: 1,
+      }),
+    }).catch(() => {})
+  }
 }
 
 export default function ProductCard({ product, index }: Props) {

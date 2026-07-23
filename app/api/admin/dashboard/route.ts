@@ -6,10 +6,11 @@ export async function GET(request: NextRequest) {
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
   if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const [totalStores, totalProducts, totalCategories, recentProducts] = await Promise.all([
+  const [totalStores, totalProducts, totalCategories, totalOrders, recentProducts] = await Promise.all([
     prisma.store.count({ where: { isActive: true } }),
     prisma.product.count({ where: { isActive: true } }),
     prisma.category.count({ where: { isActive: true } }),
+    prisma.order.count(),
     prisma.product.findMany({
       take: 5,
       orderBy: { createdAt: "desc" },
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
   ])
 
   return NextResponse.json({
-    stats: { totalStores, totalProducts, totalCategories },
+    stats: { totalStores, totalProducts, totalCategories, totalOrders },
     recentProducts,
   })
 }

@@ -15,7 +15,7 @@ import { PageTransition, SlideIn } from "@/components/admin-page-transition"
 import { motion } from "framer-motion"
 
 interface DashboardData {
-  stats: { totalStores: number; totalProducts: number; totalCategories: number }
+  stats: { totalStores: number; totalProducts: number; totalCategories: number; totalOrders: number }
   recentProducts: {
     id: string
     name: string
@@ -45,10 +45,10 @@ export default function AdminDashboard() {
   }
 
   const stats = [
-    { label: "Total UMKM", value: data?.stats.totalStores ?? 0, icon: Store, color: "bg-violet-100 text-violet-700", accent: "from-violet-500 to-purple-600" },
+    { label: "UMKM Aktif", value: data?.stats.totalStores ?? 0, icon: Store, color: "bg-violet-100 text-violet-700", accent: "from-violet-500 to-purple-600" },
     { label: "Total Produk", value: data?.stats.totalProducts ?? 0, icon: Package, color: "bg-blue-100 text-blue-700", accent: "from-blue-500 to-indigo-600" },
     { label: "Kategori", value: data?.stats.totalCategories ?? 0, icon: Tag, color: "bg-emerald-100 text-emerald-700", accent: "from-emerald-500 to-teal-600" },
-    { label: "Pesanan (WA)", value: "—", icon: ShoppingBag, color: "bg-amber-100 text-amber-700", accent: "from-amber-500 to-orange-600" },
+    { label: "Pesanan (WA)", value: data?.stats.totalOrders ?? 0, icon: ShoppingBag, color: "bg-amber-100 text-amber-700", accent: "from-amber-500 to-orange-600" },
   ]
 
   return (

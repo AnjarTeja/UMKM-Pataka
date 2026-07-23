@@ -59,6 +59,7 @@ model Store {
   products    Product[]
   galleries   Gallery[]
   visitors    Visitor[]
+  orders      Order[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -107,6 +108,7 @@ model Product {
   categoryId  String         @db.Uuid
   category    Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   images      ProductImage[]
+  orders      Order[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
@@ -185,6 +187,30 @@ model WebsiteSetting {
   aboutUs         String?  @db.Text
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+// ──────────────────────────────────────────────
+// ORDER (WhatsApp order tracking)
+// ──────────────────────────────────────────────
+
+model Order {
+  id            String   @id @default(uuid()) @db.Uuid
+  productId     String   @db.Uuid
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  storeId       String   @db.Uuid
+  store         Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  customerName  String?
+  customerPhone String?
+  quantity      Int      @default(1)
+  notes         String?  @db.Text
+  status        String   @default("pending") // pending, confirmed, completed, cancelled
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([storeId])
+  @@index([productId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 // ──────────────────────────────────────────────

@@ -1,45 +1,61 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Store, PackageSearch, Users } from "lucide-react"
 import { motion } from "framer-motion"
 
-const stats = [
-  {
-    icon: Store,
-    label: "UMKM Aktif",
-    value: "34 UMKM",
-    bg: "bg-secondary-container",
-    color: "text-on-secondary-container",
-  },
-  {
-    icon: PackageSearch,
-    label: "Total Produk",
-    value: "280+ Produk",
-    bg: "bg-primary-fixed-dim",
-    color: "text-on-primary-fixed",
-  },
-  {
-    icon: Users,
-    label: "Pesanan via WA",
-    value: "1.200+ Pesanan",
-    bg: "bg-tertiary-fixed",
-    color: "text-on-tertiary-fixed",
-  },
-]
-
-const container = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.12 },
-  },
-}
-
-const item = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+interface StatsData {
+  totalStores: number
+  totalProducts: number
+  totalOrders: number
 }
 
 export default function StatsCards() {
+  const [data, setData] = useState<StatsData | null>(null)
+
+  useEffect(() => {
+    fetch("/api/stats")
+      .then((r) => r.json())
+      .then((d) => setData(d))
+      .catch(() => {})
+  }, [])
+
+  const stats = [
+    {
+      icon: Store,
+      label: "UMKM Aktif",
+      value: data ? `${data.totalStores} UMKM` : "—",
+      bg: "bg-secondary-container",
+      color: "text-on-secondary-container",
+    },
+    {
+      icon: PackageSearch,
+      label: "Total Produk",
+      value: data ? `${data.totalProducts} Produk` : "—",
+      bg: "bg-primary-fixed-dim",
+      color: "text-on-primary-fixed",
+    },
+    {
+      icon: Users,
+      label: "Pesanan via WA",
+      value: data ? `${data.totalOrders} Pesanan` : "—",
+      bg: "bg-tertiary-fixed",
+      color: "text-on-tertiary-fixed",
+    },
+  ]
+
+  const container = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: 0.12 },
+    },
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 24 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+  }
+
   return (
     <motion.div
       variants={container}
