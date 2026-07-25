@@ -1,13 +1,13 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Flower2, Utensils, Home, Sparkles } from "lucide-react"
+import { Shirt, Paintbrush, Cookie, Utensils } from "lucide-react"
 
 const categories = [
-  { name: "Vase", icon: Flower2 },
-  { name: "Tableware", icon: Utensils },
-  { name: "Home Decor", icon: Home },
-  { name: "Artisan Specials", icon: Sparkles },
+  { name: "Fashion", icon: Shirt },
+  { name: "Kriya", icon: Paintbrush },
+  { name: "Makanan Ringan", icon: Cookie },
+  { name: "Makanan", icon: Utensils },
 ]
 
 const container = {

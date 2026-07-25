@@ -4,10 +4,10 @@ import { motion } from "framer-motion"
 import { MapPin, Users, Trees, Building2, Quote, Flower2 } from "lucide-react"
 
 const facts = [
-  { icon: Building2, label: "Luas Desa", value: "~ 425 Ha" },
-  { icon: Users, label: "Jumlah Penduduk", value: "± 4.500 Jiwa" },
-  { icon: Trees, label: "Produk Unggulan", value: "Kerajinan Tanah Liat" },
-  { icon: Flower2, label: "UMKM Aktif", value: "34 Unit Usaha" },
+  { icon: Building2, label: "Luas Desa", value: "479,850 Ha" },
+  { icon: Users, label: "Jumlah Penduduk", value: "2.222 Jiwa (2023)" },
+  { icon: Trees, label: "Produk Unggulan", value: "Gerabah" },
+  { icon: Flower2, label: "UMKM Aktif", value: "43 Unit Usaha" },
 ]
 
 export default function VillageInfo() {
@@ -23,7 +23,7 @@ export default function VillageInfo() {
         >
           <div className="relative rounded-2xl overflow-hidden clay-shadow border border-outline-variant/20">
             <img
-              src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80"
+              src="/images/sekilas-desa.jpg"
               alt="Suasana Desa Patakaharja"
               className="w-full h-72 lg:h-80 object-cover"
               loading="lazy"

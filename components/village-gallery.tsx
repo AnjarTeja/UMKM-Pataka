@@ -5,7 +5,7 @@ import { Image as ImageIcon } from "lucide-react"
 
 const images = [
   {
-    src: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&q=80",
+    src: "/images/pesona-alam-desa.jpg",
     alt: "Suasana pedesaan Patakaharja",
     label: "Pesona Alam Desa",
   },
@@ -15,7 +15,7 @@ const images = [
     label: "Proses Pembuatan Gerabah",
   },
   {
-    src: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600&q=80",
+    src: "/images/gerabah.png",
     alt: "Hasil kerajinan tanah liat",
     label: "Karya Unggulan UMKM",
   },

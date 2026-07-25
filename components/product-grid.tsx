@@ -5,7 +5,7 @@ import ProductCard from "./product-card"
 const products = [
   {
     store: "Keramik Mbah Kasidi",
-    category: "Vase Artisan",
+    category: "Kriya",
     name: "Amethyst Curve Vase",
     price: "Rp 450.000",
     image:
@@ -14,7 +14,7 @@ const products = [
   },
   {
     store: "Gerabah Ibu Sumini",
-    category: "Tableware",
+    category: "Kriya",
     name: "Rustic Earth Bowl Set",
     price: "Rp 325.000",
     image:
@@ -22,7 +22,7 @@ const products = [
   },
   {
     store: "Anyaman Pak Jaja",
-    category: "Home Decor",
+    category: "Kriya",
     name: "Lavender Lumina Base",
     price: "Rp 890.000",
     image:
@@ -30,7 +30,7 @@ const products = [
   },
   {
     store: "Kriya Mang Udin",
-    category: "Artisan Specials",
+    category: "Kriya",
     name: "Midnight Bloom Cups",
     price: "Rp 180.000",
     image:
@@ -46,7 +46,7 @@ const products = [
   },
   {
     store: "Kuliner Mang Eman",
-    category: "Food & Beverage",
+    category: "Makanan Ringan",
     name: "Kopi Pataka Roast",
     price: "Rp 85.000",
     image:
@@ -54,7 +54,7 @@ const products = [
   },
   {
     store: "Keramik Mbah Kasidi",
-    category: "Vase Artisan",
+    category: "Kriya",
     name: "Candi Mini Pataka",
     price: "Rp 650.000",
     image:
@@ -62,7 +62,7 @@ const products = [
   },
   {
     store: "Gerabah Ibu Sumini",
-    category: "Tableware",
+    category: "Kriya",
     name: "Piring Tanah Liat Set",
     price: "Rp 275.000",
     image:
