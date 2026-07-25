@@ -31,9 +31,10 @@ export default function AddProductPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/admin/produk/categories").then((r) => r.json()),
-      fetch("/api/admin/produk/stores").then((r) => r.json()),
+      fetch("/api/admin/produk/categories").then((r) => { if (!r.ok) throw new Error(); return r.json() }),
+      fetch("/api/admin/produk/stores").then((r) => { if (!r.ok) throw new Error(); return r.json() }),
     ]).then(([cats, str]) => { setCategories(cats); setStores(str) })
+      .catch(() => toast.error("Gagal memuat data"))
   }, [])
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +71,10 @@ export default function AddProductPage() {
         body: JSON.stringify({ name, description, price: Number(price), stock: Number(stock), unit, isFeatured, storeId, categoryId, images: images.map((img) => ({ url: img.url, alt: img.alt, isPrimary: img.isPrimary })) }),
       })
       if (res.ok) { toast.success("Produk berhasil ditambahkan"); router.push("/admin/produk") }
-      else toast.error("Gagal menambahkan produk")
+      else {
+        const err = await res.json().catch(() => ({}))
+        toast.error(err.error || "Gagal menambahkan produk")
+      }
     } catch { toast.error("Terjadi kesalahan") } finally { setLoading(false) }
   }
 
@@ -121,6 +125,7 @@ export default function AddProductPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">UMKM *</label>
                 <select value={storeId} onChange={(e) => setStoreId(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none bg-white">
                   <option value="">Pilih UMKM</option>
+                  {stores.length === 0 && <option value="" disabled>Tidak ada UMKM — tambah UMKM dulu</option>}
                   {stores.map((s) => (<option key={s.id} value={s.id}>{s.name}</option>))}
                 </select>
               </div>
@@ -128,6 +133,7 @@ export default function AddProductPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Kategori *</label>
                 <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none bg-white">
                   <option value="">Pilih Kategori</option>
+                  {categories.length === 0 && <option value="" disabled>Belum ada kategori</option>}
                   {categories.map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))}
                 </select>
               </div>

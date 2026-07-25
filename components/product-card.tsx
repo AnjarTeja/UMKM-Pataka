@@ -11,6 +11,7 @@ export interface ProductData {
   image: string
   store?: string
   storeId?: string
+  storeWhatsapp?: string | null
 }
 
 interface Props {
@@ -19,10 +20,11 @@ interface Props {
 }
 
 function waOrder(product: ProductData) {
+  const waNumber = product.storeWhatsapp || "6281234567890"
   const msg = encodeURIComponent(
     `Halo, saya tertarik dengan produk *${product.name}* (${product.category}) seharga ${product.price}. Apakah masih tersedia?`
   )
-  window.open(`https://wa.me/6281234567890?text=${msg}`, "_blank")
+  window.open(`https://wa.me/${waNumber}?text=${msg}`, "_blank")
 
   if (product.id && product.storeId) {
     fetch("/api/orders", {

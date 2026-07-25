@@ -1,42 +1,36 @@
 "use client"
 
 import Link from "next/link"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { ArrowRight, Sparkles } from "lucide-react"
+import { ArrowRight, Sparkles, Loader2 } from "lucide-react"
 import ProductCard from "./product-card"
 
-const featured = [
-  {
-    store: "Keramik Mbah Kasidi",
-    category: "Vase Artisan",
-    name: "Amethyst Curve Vase",
-    price: "Rp 450.000",
-    image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600&q=80",
-  },
-  {
-    store: "Gerabah Ibu Sumini",
-    category: "Tableware",
-    name: "Rustic Earth Bowl Set",
-    price: "Rp 325.000",
-    image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&q=80",
-  },
-  {
-    store: "Anyaman Pak Jaja",
-    category: "Home Decor",
-    name: "Lavender Lumina Base",
-    price: "Rp 890.000",
-    image: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=600&q=80",
-  },
-  {
-    store: "Kriya Mang Udin",
-    category: "Artisan Specials",
-    name: "Midnight Bloom Cups",
-    price: "Rp 180.000",
-    image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&q=80",
-  },
-]
+interface ProductData {
+  id: string
+  name: string
+  price: string
+  image: string
+  store: string
+  storeId: string
+  storeWhatsapp: string | null
+  category: string
+  categorySlug: string
+}
 
 export default function FeaturedProducts() {
+  const [products, setProducts] = useState<ProductData[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch("/api/produk?featured=true")
+      .then((r) => r.json())
+      .then((data) => {
+        setProducts(data.products || [])
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
   return (
     <section className="max-w-[1400px] mx-auto px-6 mt-16">
       <motion.div
@@ -70,15 +64,24 @@ export default function FeaturedProducts() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {featured.map((product, i) => (
-          <ProductCard
-            key={`${product.store}-${product.name}`}
-            product={product}
-            index={i}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-5 w-5 animate-spin text-primary" />
+          <span className="ml-2 text-on-surface-variant text-sm">Memuat...</span>
+        </div>
+      ) : products.length === 0 ? (
+        <p className="text-center text-on-surface-variant text-sm py-12">Belum ada produk unggulan</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {products.map((product, i) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              index={i}
+            />
+          ))}
+        </div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}
