@@ -103,7 +103,7 @@ export default function HelpSection() {
           Masih punya pertanyaan? Hubungi kami langsung
         </p>
         <a
-          href="https://wa.me/6281234567890?text=Halo%20saya%20butuh%20bantuan"
+          href="https://wa.me/6282316627926?text=Halo%20saya%20butuh%20bantuan"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-green-500 text-white text-sm font-semibold hover:bg-green-600 transition-all active:scale-95 shadow-sm"

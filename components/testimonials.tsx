@@ -1,43 +1,88 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Quote, ChevronLeft, ChevronRight, Star } from "lucide-react"
+import { ChevronLeft, ChevronRight, MessageCircle } from "lucide-react"
+import { formatPrice } from "@/lib/utils"
 
-const testimonials = [
-  {
-    name: "Siti Rahayu",
-    role: "Pelanggan dari Jakarta",
-    text: "Saya pesan set piring dari Gerabah Ibu Sumini via WhatsApp, responnya cepat banget. Produk sampai dengan aman dan kualitasnya luar biasa untuk harga segitu. Pasti akan order lagi!",
-    rating: 5,
-  },
-  {
-    name: "Dimas Pratama",
-    role: "Dekorator Interior",
-    text: "Vase dari Keramik Mbah Kasidi jadi favorit klien saya. Setiap piece unik, finishingnya halus. Sangat merekomendasikan untuk teman-teman yang cari home decor berkualitas.",
-    rating: 5,
-  },
-  {
-    name: "Rina Marlina",
-    role: "Kolektor Kerajinan",
-    text: "Sudah 3 kali belanja di Patakaharja. Pelayanannya personal, bisa request desain custom. Yang paling saya suka, semua harga transparan tanpa biaya tersembunyi.",
-    rating: 5,
-  },
-  {
-    name: "Asep Hidayat",
-    role: "Eksportir Kerajinan",
-    text: "Potensi UMKM Patakaharja sangat besar. Kualitas gerabahnya setara dengan produk impor tapi dengan harga lokal. Saya sudah kerja sama dengan 3 pengrajin di sini.",
-    rating: 5,
-  },
-]
+interface ProductItem {
+  id: string
+  name: string
+  price: string
+  image: string
+  store: string
+  storeId: string
+  storeWhatsapp: string | null
+  category: string
+  orderCount: number
+}
+
+function waOrder(product: ProductItem) {
+  const waNumber = product.storeWhatsapp || "6281234567890"
+  const msg = encodeURIComponent(
+    `Halo, saya tertarik dengan produk *${product.name}* (${product.store}) seharga ${formatPrice(product.price)}. Apakah masih tersedia?`
+  )
+  window.open(`https://wa.me/${waNumber}?text=${msg}`, "_blank")
+
+  if (product.id && product.storeId) {
+    fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        productId: product.id,
+        storeId: product.storeId,
+        quantity: 1,
+      }),
+    }).catch(() => {})
+  }
+}
 
 export default function Testimonials() {
+  const [products, setProducts] = useState<ProductItem[]>([])
+  const [loading, setLoading] = useState(true)
   const [current, setCurrent] = useState(0)
 
-  const prev = () => setCurrent((c) => (c === 0 ? testimonials.length - 1 : c - 1))
-  const next = () => setCurrent((c) => (c === testimonials.length - 1 ? 0 : c + 1))
+  useEffect(() => {
+    fetch("/api/produk?popular=true")
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data.products || [])
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
 
-  const t = testimonials[current]
+  const prev = () => setCurrent((c) => (c === 0 ? products.length - 1 : c - 1))
+  const next = () => setCurrent((c) => (c === products.length - 1 ? 0 : c + 1))
+
+  const p = products[current]
+
+  if (loading) {
+    return (
+      <section className="max-w-[1400px] mx-auto px-6 mt-16">
+        <div className="text-center mb-10">
+          <span className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">Pilihan</span>
+          <h2 className="font-heading text-3xl font-semibold text-primary">Produk Populer</h2>
+          <p className="text-on-surface-variant mt-1 max-w-md mx-auto">Produk favorit dari UMKM Patakaharja — pesan langsung via WhatsApp</p>
+        </div>
+        <div className="max-w-2xl mx-auto">
+          <div className="relative bg-surface-container-lowest rounded-2xl clay-shadow border border-outline-variant/20 overflow-hidden">
+            <div className="h-72 bg-surface-container animate-pulse" />
+            <div className="p-6 space-y-3">
+              <div className="h-4 w-24 bg-surface-container animate-pulse rounded" />
+              <div className="h-3 w-16 bg-surface-container animate-pulse rounded" />
+              <div className="h-6 w-48 bg-surface-container animate-pulse rounded" />
+              <div className="h-8 w-32 bg-surface-container animate-pulse rounded" />
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (products.length === 0) {
+    return null
+  }
 
   return (
     <section className="max-w-[1400px] mx-auto px-6 mt-16">
@@ -48,65 +93,68 @@ export default function Testimonials() {
         transition={{ duration: 0.5 }}
         className="text-center mb-10"
       >
-        <span className="text-xs font-semibold text-primary uppercase tracking-widest flex items-center justify-center gap-1.5 mb-2">
-          <Quote className="h-4 w-4" />
-          Testimoni
+        <span className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">
+          Pilihan
         </span>
         <h2 className="font-heading text-3xl font-semibold text-primary">
-          Kata Mereka
+          Produk Populer
         </h2>
         <p className="text-on-surface-variant mt-1 max-w-md mx-auto">
-          Pengalaman nyata dari pelanggan yang sudah belanja di UMKM Patakaharja
+          Produk favorit dari UMKM Patakaharja — pesan langsung via WhatsApp
         </p>
       </motion.div>
 
-      <div className="max-w-5xl mx-auto">
-        <div className="relative bg-surface-container-lowest rounded-2xl p-8 md:p-14 clay-shadow border border-outline-variant/20">
-          <div className="absolute top-4 right-4 text-primary-fixed-dim/15">
-            <Quote className="h-28 w-28" />
-          </div>
+      <div className="max-w-2xl mx-auto">
+        <div className="relative bg-surface-container-lowest rounded-2xl clay-shadow border border-outline-variant/20 overflow-hidden">
+          <div className="relative min-h-[400px] flex flex-col">
+            <div className="h-72 overflow-hidden">
+              <img
+                src={p.image}
+                alt={p.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
 
-          <div className="relative z-10 min-h-[260px] flex flex-col justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={current}
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -40 }}
-                transition={{ duration: 0.35, ease: "easeOut" as const }}
-                className="space-y-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: "easeOut" as const }}
+                className="p-6 space-y-3 flex-1 flex flex-col justify-between"
               >
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-5 w-5 fill-yellow-500 text-yellow-500"
-                    />
-                  ))}
+                <div>
+                  {p.store && (
+                    <p className="text-sm text-primary font-medium">{p.store}</p>
+                  )}
+                  <p className="text-xs font-medium text-on-secondary-container uppercase tracking-wide">
+                    {p.category}
+                  </p>
+                  <h3 className="font-heading text-xl font-semibold text-primary mt-1">
+                    {p.name}
+                  </h3>
                 </div>
 
-                <p className="text-on-surface text-lg leading-relaxed italic">
-                  &ldquo;{t.text}&rdquo;
-                </p>
-
-                <div className="flex items-center gap-4 pt-4">
-                  <div className="h-12 w-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-heading font-bold text-base">
-                    {t.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-heading text-base font-semibold text-primary">
-                      {t.name}
-                    </p>
-                    <p className="text-sm text-on-surface-variant">{t.role}</p>
-                  </div>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-2xl text-on-surface">
+                    {formatPrice(p.price)}
+                  </span>
+                  <button
+                    onClick={() => waOrder(p)}
+                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-green-500 text-white text-sm font-semibold hover:bg-green-600 transition-all active:scale-90 shadow-sm"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    Pesan WA
+                  </button>
                 </div>
               </motion.div>
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-between mt-6 pt-4 border-t border-outline-variant/20">
+          <div className="flex items-center justify-between px-6 pb-6">
             <div className="flex items-center gap-1.5">
-              {testimonials.map((_, i) => (
+              {products.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setCurrent(i)}
@@ -135,7 +183,6 @@ export default function Testimonials() {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   )

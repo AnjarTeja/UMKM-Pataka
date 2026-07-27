@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, Loader2 } from "lucide-react"
+import { Search } from "lucide-react"
 import ProductCard from "./product-card"
 
 interface ProductData {
@@ -17,10 +17,9 @@ interface ProductData {
   categorySlug: string
 }
 
-const categoryList = ["Semua", "Fashion", "Kriya", "Makanan Ringan", "Makanan"]
-
 export default function AllProducts() {
   const [products, setProducts] = useState<ProductData[]>([])
+  const [categories, setCategories] = useState<string[]>(["Semua"])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState("Semua")
   const [search, setSearch] = useState("")
@@ -30,6 +29,9 @@ export default function AllProducts() {
       .then((r) => r.json())
       .then((data) => {
         setProducts(data.products || [])
+        if (data.categories?.length) {
+          setCategories(["Semua", ...data.categories.map((c: { name: string }) => c.name)])
+        }
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -43,9 +45,27 @@ export default function AllProducts() {
 
   if (loading) {
     return (
-      <div className="max-w-[1400px] mx-auto px-6 py-20 flex items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-primary" />
-        <span className="ml-2 text-on-surface-variant text-sm">Memuat produk...</span>
+      <div className="max-w-[1400px] mx-auto px-6">
+        <div className="text-center mb-8">
+          <h1 className="font-heading text-4xl font-bold text-primary">Semua Produk</h1>
+          <p className="text-on-surface-variant mt-1">Pesan langsung via WhatsApp — tanpa ribet</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="bg-surface rounded-2xl overflow-hidden border border-outline-variant/20">
+              <div className="h-64 bg-surface-container animate-pulse" />
+              <div className="p-5 space-y-3">
+                <div className="h-3 w-20 bg-surface-container animate-pulse rounded" />
+                <div className="h-3 w-16 bg-surface-container animate-pulse rounded" />
+                <div className="h-5 w-40 bg-surface-container animate-pulse rounded" />
+                <div className="flex justify-between items-center">
+                  <div className="h-6 w-24 bg-surface-container animate-pulse rounded" />
+                  <div className="h-9 w-24 bg-surface-container animate-pulse rounded-lg" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
@@ -75,7 +95,7 @@ export default function AllProducts() {
       </div>
 
       <div className="flex flex-wrap justify-center gap-2 mb-10">
-        {categoryList.map((cat) => (
+        {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}

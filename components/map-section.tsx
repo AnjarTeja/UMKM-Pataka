@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 
-const CENTER_LAT = -7.164536
-const CENTER_LNG = 108.509298
+const CENTER_LAT = -7.1687
+const CENTER_LNG = 108.5052
 
 export default function MapSection() {
   const [mounted, setMounted] = useState(false)
@@ -36,6 +36,9 @@ export default function MapSection() {
         <h2 className="font-heading text-3xl font-semibold text-primary">Peta Lokasi UMKM</h2>
         <p className="text-on-surface-variant mt-1">
           Temukan dan kunjungi langsung UMKM di Desa Patakaharja
+        </p>
+        <p className="text-xs text-on-surface-variant mt-1">
+          Jl.Raya Tangkolo, Patakaharja, Kec. Rancah, Kab. Ciamis, Jawa Barat 46387
         </p>
       </div>
 

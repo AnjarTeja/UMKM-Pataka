@@ -30,6 +30,7 @@ export default function AdminProductsPage() {
   const [searchInput, setSearchInput] = useState("")
   const [loading, setLoading] = useState(true)
   const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [refreshKey, setRefreshKey] = useState(0)
   const fetchingRef = useRef(0)
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function AdminProductsPage() {
         }
       })
       .catch(() => { if (id === fetchingRef.current) setLoading(false) })
-  }, [page, search])
+  }, [page, search, refreshKey])
 
   const handleDelete = async (id: string) => {
     try {
@@ -58,9 +59,8 @@ export default function AdminProductsPage() {
         setDeleteId(null)
         if (products.length === 1 && page > 1) {
           setPage((p) => p - 1)
-        } else {
-          setSearch((s) => s)
         }
+        setRefreshKey((k) => k + 1)
       } else {
         toast.error("Gagal menonaktifkan produk")
       }

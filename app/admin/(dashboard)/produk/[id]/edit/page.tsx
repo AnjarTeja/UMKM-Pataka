@@ -39,14 +39,19 @@ export default function EditProductPage() {
       fetch("/api/admin/produk/categories").then((r) => r.json()),
       fetch("/api/admin/produk/stores").then((r) => r.json()),
       fetch(`/api/admin/produk/${id}`).then((r) => r.json()),
-    ]).then(([cats, storesData, product]) => {
-      setCategories(cats); setStores(storesData)
-      setName(product.name); setDescription(product.description || "")
-      setPrice(String(product.price)); setStock(String(product.stock))
-      setUnit(product.unit); setIsFeatured(product.isFeatured); setIsActive(product.isActive)
-      setStoreId(product.storeId); setCategoryId(product.categoryId)
-      setImages(product.images || []); setFetchLoading(false)
-    })
+    ])
+      .then(([cats, storesData, product]) => {
+        setCategories(cats); setStores(storesData)
+        setName(product.name); setDescription(product.description || "")
+        setPrice(String(product.price)); setStock(String(product.stock))
+        setUnit(product.unit); setIsFeatured(product.isFeatured); setIsActive(product.isActive)
+        setStoreId(product.storeId); setCategoryId(product.categoryId)
+        setImages(product.images || []); setFetchLoading(false)
+      })
+      .catch(() => {
+        toast.error("Gagal memuat data produk")
+        setFetchLoading(false)
+      })
   }, [id])
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {

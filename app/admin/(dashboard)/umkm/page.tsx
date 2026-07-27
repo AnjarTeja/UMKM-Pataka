@@ -22,6 +22,7 @@ export default function AdminStoresPage() {
   const [stores, setStores] = useState<Store[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [refreshKey, setRefreshKey] = useState(0)
   const fetchingRef = useRef(0)
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function AdminStoresPage() {
       .then((r) => r.json())
       .then((data) => { if (id === fetchingRef.current) { setStores(data); setLoading(false) } })
       .catch(() => { if (id === fetchingRef.current) setLoading(false) })
-  }, [])
+  }, [refreshKey])
 
   const handleDelete = async (id: string) => {
     try {
@@ -38,6 +39,7 @@ export default function AdminStoresPage() {
       if (res.ok) {
         toast.success("UMKM dinonaktifkan")
         setDeleteId(null)
+        setRefreshKey((k) => k + 1)
       } else {
         toast.error("Gagal menonaktifkan UMKM")
       }

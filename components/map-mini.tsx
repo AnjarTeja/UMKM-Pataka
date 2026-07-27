@@ -5,8 +5,8 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { MapPin, ArrowRight, Maximize2 } from "lucide-react"
 
-const CENTER_LAT = -7.164536
-const CENTER_LNG = 108.509298
+const CENTER_LAT = -7.1687
+const CENTER_LNG = 108.5052
 
 export default function MapMini() {
   const [mounted, setMounted] = useState(false)
