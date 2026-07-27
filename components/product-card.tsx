@@ -2,6 +2,7 @@
 
 import { MessageCircle } from "lucide-react"
 import { motion } from "framer-motion"
+import { formatPrice } from "@/lib/utils"
 
 export interface ProductData {
   id?: string
@@ -22,7 +23,7 @@ interface Props {
 function waOrder(product: ProductData) {
   const waNumber = product.storeWhatsapp || "6281234567890"
   const msg = encodeURIComponent(
-    `Halo, saya tertarik dengan produk *${product.name}* (${product.category}) seharga ${product.price}. Apakah masih tersedia?`
+    `Halo, saya tertarik dengan produk *${product.name}* (${product.category}) seharga ${formatPrice(product.price)}. Apakah masih tersedia?`
   )
   window.open(`https://wa.me/${waNumber}?text=${msg}`, "_blank")
 
@@ -68,7 +69,7 @@ export default function ProductCard({ product, index }: Props) {
           {product.name}
         </h3>
         <div className="flex items-center justify-between">
-          <span className="font-bold text-lg text-on-surface">{product.price}</span>
+          <span className="font-bold text-lg text-on-surface">{formatPrice(product.price)}</span>
           <button
             onClick={() => waOrder(product)}
             className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-green-500 text-white text-xs font-semibold hover:bg-green-600 transition-all active:scale-90 shadow-sm"

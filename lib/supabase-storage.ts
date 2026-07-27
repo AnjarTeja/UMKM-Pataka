@@ -1,40 +1,37 @@
-import { createClient } from "@supabase/supabase-js"
+import { writeFile, unlink, mkdir } from "fs/promises"
+import path from "path"
 
-function getSupabase() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const ALLOWED_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/avif",
+  "image/bmp",
+  "image/tiff",
+  "image/svg+xml",
+]
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error("NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY harus diisi di .env")
+export async function uploadFile(file: File, folder: string): Promise<string> {
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    throw new Error("Format file tidak didukung. Gunakan: JPG, PNG, WebP, GIF, AVIF, BMP, TIFF, SVG")
   }
 
-  return createClient(supabaseUrl, supabaseAnonKey)
-}
-
-export async function uploadFile(file: File, bucket: string): Promise<string> {
-  const supabase = getSupabase()
-  const ext = file.name.split(".").pop()
+  const ext = file.name.split(".").pop() || "jpg"
   const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`
-  const filePath = fileName
+  const uploadDir = path.join(process.cwd(), "public", "uploads", folder)
+  const filePath = path.join(uploadDir, fileName)
 
-  const { error } = await supabase.storage
-    .from(bucket)
-    .upload(filePath, file, {
-      cacheControl: "3600",
-      upsert: false,
-    })
+  await mkdir(uploadDir, { recursive: true })
 
-  if (error) throw new Error(error.message)
+  const buffer = Buffer.from(await file.arrayBuffer())
+  await writeFile(filePath, buffer)
 
-  const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(filePath)
-  return urlData.publicUrl
+  return `/uploads/${folder}/${fileName}`
 }
 
-export async function deleteFile(url: string, bucket: string) {
-  const supabase = getSupabase()
-  const path = url.split("/").pop()
-  if (!path) return
-
-  const { error } = await supabase.storage.from(bucket).remove([path])
-  if (error) throw new Error(error.message)
+export async function deleteFile(url: string, _bucket: string) {
+  const relativePath = url.replace(/^\//, "")
+  const filePath = path.join(process.cwd(), "public", relativePath)
+  await unlink(filePath).catch(() => {})
 }

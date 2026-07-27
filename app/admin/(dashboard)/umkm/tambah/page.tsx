@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Upload, X, Loader2 } from "lucide-react"
+import { ArrowLeft, Loader2 } from "lucide-react"
 import { PageTransition, SlideIn } from "@/components/admin-page-transition"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
@@ -11,44 +11,28 @@ import { toast } from "sonner"
 export default function AddStorePage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [uploading, setUploading] = useState({ logo: false, banner: false })
-  const [showPassword, setShowPassword] = useState(false)
 
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [address, setAddress] = useState("")
-  const [phone, setPhone] = useState("")
   const [whatsapp, setWhatsapp] = useState("")
-  const [latitude, setLatitude] = useState("")
-  const [longitude, setLongitude] = useState("")
-  const [logo, setLogo] = useState("")
-  const [banner, setBanner] = useState("")
   const [sellerName, setSellerName] = useState("")
-  const [sellerEmail, setSellerEmail] = useState("")
-  const [sellerPassword, setSellerPassword] = useState("")
-
-  const handleUpload = async (file: File, field: "logo" | "banner") => {
-    setUploading((prev) => ({ ...prev, [field]: true }))
-    const formData = new FormData(); formData.append("file", file); formData.append("folder", "umkm")
-    try {
-      const res = await fetch("/api/upload", { method: "POST", body: formData })
-      const data = await res.json()
-      if (data.url) { if (field === "logo") setLogo(data.url); else setBanner(data.url) }
-    } catch { toast.error("Gagal upload gambar") } finally { setUploading((prev) => ({ ...prev, [field]: false })) }
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name || !sellerName || !sellerEmail || !sellerPassword) { toast.error("Lengkapi data yang wajib diisi"); return }
+    if (!name || !sellerName) { toast.error("Nama UMKM dan Nama Seller wajib diisi"); return }
     setLoading(true)
     try {
       const res = await fetch("/api/admin/umkm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description: description || undefined, logo: logo || undefined, banner: banner || undefined, address: address || undefined, phone: phone || undefined, whatsapp: whatsapp || undefined, latitude: latitude ? Number(latitude) : undefined, longitude: longitude ? Number(longitude) : undefined, sellerName, sellerEmail, sellerPassword }),
+        body: JSON.stringify({ name, description: description || undefined, address: address || undefined, whatsapp: whatsapp || undefined, sellerName }),
       })
       if (res.ok) { toast.success("UMKM berhasil ditambahkan"); router.push("/admin/umkm") }
-      else toast.error("Gagal menambahkan UMKM")
+      else {
+        const err = await res.json().catch(() => ({}))
+        toast.error(err.error || "Gagal menambahkan UMKM")
+      }
     } catch { toast.error("Terjadi kesalahan") } finally { setLoading(false) }
   }
 
@@ -75,53 +59,23 @@ export default function AddStorePage() {
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none resize-none" placeholder="Deskripsi UMKM" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div><label className="block text-sm font-medium text-gray-700 mb-1.5">Alamat</label><input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Alamat lengkap" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1.5">No. Telepon</label><input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Contoh: 0812xxxx" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1.5">No. WhatsApp</label><input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Contoh: 62812xxxx" /></div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div><label className="block text-sm font-medium text-gray-700 mb-1.5">Latitude</label><input type="number" step="any" value={latitude} onChange={(e) => setLatitude(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="-7.1645" /></div>
-                  <div><label className="block text-sm font-medium text-gray-700 mb-1.5">Longitude</label><input type="number" step="any" value={longitude} onChange={(e) => setLongitude(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="108.5093" /></div>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Logo</label>
-                  <div className="flex items-center gap-3">
-                    {logo && <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gray-200 flex-shrink-0"><img src={logo} alt="" className="w-full h-full object-cover" /><button type="button" onClick={() => setLogo("")} className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full p-0.5"><X className="h-3 w-3" /></button></div>}
-                    <label className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-dashed border-gray-200 hover:border-violet-400 hover:bg-violet-50 cursor-pointer transition-all text-sm text-gray-400">
-                      {uploading.logo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                      {uploading.logo ? "Uploading..." : "Upload Logo"}
-                      <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0], "logo")} className="hidden" />
-                    </label>
-                  </div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Alamat</label>
+                  <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Alamat lengkap" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Banner</label>
-                  <div className="flex items-center gap-3">
-                    {banner && <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gray-200 flex-shrink-0"><img src={banner} alt="" className="w-full h-full object-cover" /><button type="button" onClick={() => setBanner("")} className="absolute top-0.5 right-0.5 bg-red-500 text-white rounded-full p-0.5"><X className="h-3 w-3" /></button></div>}
-                    <label className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-dashed border-gray-200 hover:border-violet-400 hover:bg-violet-50 cursor-pointer transition-all text-sm text-gray-400">
-                      {uploading.banner ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                      {uploading.banner ? "Uploading..." : "Upload Banner"}
-                      <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0], "banner")} className="hidden" />
-                    </label>
-                  </div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">No. WhatsApp</label>
+                  <input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Contoh: 62812xxxx" />
                 </div>
               </div>
             </div>
 
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-              <h2 className="font-heading font-semibold text-[#1a1a1a]">Akun Seller</h2>
-              <p className="text-sm text-gray-500">Akun ini akan dibuat otomatis untuk pemilik UMKM.</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div><label className="block text-sm font-medium text-gray-700 mb-1.5">Nama Seller *</label><input type="text" value={sellerName} onChange={(e) => setSellerName(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Nama pemilik" /></div>
-                <div><label className="block text-sm font-medium text-gray-700 mb-1.5">Email Seller *</label><input type="email" value={sellerEmail} onChange={(e) => setSellerEmail(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Email untuk login" /></div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Password *</label>
-                  <div className="relative">
-                    <input type={showPassword ? "text" : "password"} value={sellerPassword} onChange={(e) => setSellerPassword(e.target.value)} required minLength={6} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-14 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Min. 6 karakter" />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium hover:text-gray-600 transition-colors">{showPassword ? "Sembunyi" : "Lihat"}</button>
-                  </div>
-                </div>
+              <h2 className="font-heading font-semibold text-[#1a1a1a]">Data Seller</h2>
+              <p className="text-sm text-gray-500">Nama pemilik UMKM.</p>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Nama Seller *</label>
+                <input type="text" value={sellerName} onChange={(e) => setSellerName(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Nama pemilik" />
               </div>
             </div>
 

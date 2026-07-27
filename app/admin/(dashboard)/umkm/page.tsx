@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { Plus, StoreIcon, Edit3, Trash2, MapPin, Loader2 } from "lucide-react"
+import { Plus, StoreIcon, Edit3, Trash2, Loader2 } from "lucide-react"
 import { PageTransition, SlideIn, StaggerRow, ModalBackdrop } from "@/components/admin-page-transition"
 import { AnimatePresence } from "framer-motion"
 import { toast } from "sonner"
@@ -11,12 +11,8 @@ interface Store {
   id: string
   name: string
   slug: string
-  logo: string | null
-  phone: string | null
   whatsapp: string | null
   isActive: boolean
-  latitude: number | null
-  longitude: number | null
   user: { id: string; name: string; email: string }
   _count: { products: number }
   createdAt: string
@@ -73,9 +69,9 @@ export default function AdminStoresPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-100 bg-gray-50/50">
-                    {["UMKM", "Kontak", "Produk", "Lokasi", "Status", "Aksi"].map((h, i) => (
+                    {["UMKM", "Kontak", "Produk", "Status", "Aksi"].map((h, i) => (
                       <th key={h} className={`px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider ${
-                        i <= 1 ? "text-left" : i >= 2 && i <= 4 ? "text-center" : "text-right"
+                        i === 0 ? "text-left" : i === 4 ? "text-right" : "text-center"
                       }`}>{h}</th>
                     ))}
                   </tr>
@@ -83,7 +79,7 @@ export default function AdminStoresPage() {
                 <tbody>
                   {loading && (
                     <tr>
-                      <td colSpan={6}>
+                      <td colSpan={5}>
                         <div className="flex items-center justify-center py-12">
                           <Loader2 className="h-6 w-6 animate-spin text-violet-600" />
                           <span className="ml-2 text-gray-400 text-sm">Memuat data...</span>
@@ -92,43 +88,32 @@ export default function AdminStoresPage() {
                     </tr>
                   )}
                   {!loading && stores.length === 0 && (
-                    <tr><td colSpan={6} className="text-center py-12 text-gray-400">Belum ada UMKM</td></tr>
+                    <tr><td colSpan={5} className="text-center py-12 text-gray-400">Belum ada UMKM</td></tr>
                   )}
                   {!loading && stores.map((store, idx) => (
                     <StaggerRow key={store.id} index={idx} className="border-b border-gray-50 hover:bg-gradient-to-r hover:from-violet-50/40 hover:to-transparent transition-all">
                       <td className="px-4 py-3.5">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-gray-100 flex-shrink-0 overflow-hidden ring-1 ring-gray-200">
-                            {store.logo ? (
-                              <img src={store.logo} alt="" className="w-full h-full object-cover" />
-                            ) : (
-                              <StoreIcon className="h-4 w-4 text-gray-400 m-auto mt-2.5" />
-                            )}
+                          <div className="w-9 h-9 rounded-lg bg-violet-100 flex-shrink-0 flex items-center justify-center ring-1 ring-violet-200">
+                            <StoreIcon className="h-4 w-4 text-violet-600" />
                           </div>
                           <div>
                             <p className="font-medium text-[#1a1a1a]">{store.name}</p>
-                            <p className="text-xs text-gray-400">{store.user.email}</p>
+                            <p className="text-xs text-gray-400">{store.user.name}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-4 py-3.5">
-                        <p className="text-gray-600">{store.phone || "—"}</p>
-                        {store.whatsapp && <p className="text-xs text-green-600">WA: {store.whatsapp}</p>}
+                        {store.whatsapp ? (
+                          <span className="text-xs text-green-600 font-medium">{store.whatsapp}</span>
+                        ) : (
+                          <span className="text-xs text-gray-300">—</span>
+                        )}
                       </td>
                       <td className="px-4 py-3.5 text-center">
                         <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-violet-50 text-violet-600 text-xs font-semibold">
                           {store._count.products}
                         </span>
-                      </td>
-                      <td className="px-4 py-3.5 text-center">
-                        {store.latitude && store.longitude ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-violet-600">
-                            <MapPin className="h-3 w-3" />
-                            Terdaftar
-                          </span>
-                        ) : (
-                          <span className="text-xs text-gray-300">—</span>
-                        )}
                       </td>
                       <td className="px-4 py-3.5 text-center">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

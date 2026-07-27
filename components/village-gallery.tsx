@@ -10,7 +10,7 @@ const images = [
     label: "Pesona Alam Desa",
   },
   {
-    src: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe8ef?w=600&q=80",
+    src: "/images/pembuatan-gerabah.jpeg",
     alt: "Pengrajin gerabah tradisional",
     label: "Proses Pembuatan Gerabah",
   },
@@ -78,7 +78,7 @@ export default function VillageGallery() {
             }`}
           >
             <div
-              className={`overflow-hidden ${
+              className={`overflow-hidden bg-neutral-900 ${
                 i === 0 ? "h-80 sm:h-[520px]" : "h-52 sm:h-60"
               }`}
             >

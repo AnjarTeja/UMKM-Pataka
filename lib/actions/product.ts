@@ -43,8 +43,21 @@ export async function getProduct(id: string) {
   })
 }
 
+const DEFAULT_CATEGORIES = ["Fashion", "Kriya", "Makanan Ringan", "Makanan"]
+
 export async function getCategories() {
-  return prisma.category.findMany({ where: { isActive: true }, orderBy: { name: "asc" } })
+  let categories = await prisma.category.findMany({ where: { isActive: true }, orderBy: { name: "asc" } })
+
+  if (categories.length === 0) {
+    for (const name of DEFAULT_CATEGORIES) {
+      const cat = await prisma.category.create({
+        data: { name, slug: slugify(name), isActive: true },
+      })
+      categories.push(cat)
+    }
+  }
+
+  return categories
 }
 
 export async function getStoresList() {

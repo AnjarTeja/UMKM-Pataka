@@ -41,16 +41,9 @@ export async function getStore(id: string) {
 export async function createStore(data: {
   name: string
   description?: string
-  logo?: string
-  banner?: string
   address?: string
-  phone?: string
   whatsapp?: string
-  latitude?: number
-  longitude?: number
   sellerName: string
-  sellerEmail: string
-  sellerPassword: string
 }) {
   const baseSlug = slugify(data.name)
   let slug = baseSlug
@@ -60,24 +53,21 @@ export async function createStore(data: {
     counter++
   }
 
-  const hashedPassword = await bcrypt.hash(data.sellerPassword, 12)
+  const autoEmail = `${slug}@umkm.pataka`
+  const autoPassword = "umkm123"
+  const hashedPassword = await bcrypt.hash(autoPassword, 12)
 
   const store = await prisma.store.create({
     data: {
       name: data.name,
       slug,
       description: data.description,
-      logo: data.logo,
-      banner: data.banner,
       address: data.address,
-      phone: data.phone,
       whatsapp: data.whatsapp,
-      latitude: data.latitude,
-      longitude: data.longitude,
       user: {
         create: {
           name: data.sellerName,
-          email: data.sellerEmail,
+          email: autoEmail,
           password: hashedPassword,
           role: "SELLER",
         },
@@ -95,13 +85,8 @@ export async function updateStore(
   data: {
     name: string
     description?: string
-    logo?: string
-    banner?: string
     address?: string
-    phone?: string
     whatsapp?: string
-    latitude?: number
-    longitude?: number
     isActive: boolean
   }
 ) {
@@ -126,13 +111,8 @@ export async function updateStore(
       name: data.name,
       slug,
       description: data.description,
-      logo: data.logo,
-      banner: data.banner,
       address: data.address,
-      phone: data.phone,
       whatsapp: data.whatsapp,
-      latitude: data.latitude,
-      longitude: data.longitude,
       isActive: data.isActive,
     },
   })
