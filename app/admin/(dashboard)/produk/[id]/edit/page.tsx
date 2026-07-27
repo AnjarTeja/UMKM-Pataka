@@ -24,7 +24,6 @@ export default function EditProductPage() {
   const [uploading, setUploading] = useState(false)
 
   const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
   const [price, setPrice] = useState("")
   const [stock, setStock] = useState("0")
   const [unit, setUnit] = useState("pcs")
@@ -42,7 +41,7 @@ export default function EditProductPage() {
     ])
       .then(([cats, storesData, product]) => {
         setCategories(cats); setStores(storesData)
-        setName(product.name); setDescription(product.description || "")
+        setName(product.name)
         setPrice(String(product.price)); setStock(String(product.stock))
         setUnit(product.unit); setIsFeatured(product.isFeatured); setIsActive(product.isActive)
         setStoreId(product.storeId); setCategoryId(product.categoryId)
@@ -79,7 +78,7 @@ export default function EditProductPage() {
       const res = await fetch(`/api/admin/produk/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description, price: Number(price), stock: Number(stock), unit, isFeatured, isActive, storeId, categoryId, images }),
+        body: JSON.stringify({ name, price: Number(price), stock: Number(stock), unit, isFeatured, isActive, storeId, categoryId, images }),
       })
       if (res.ok) { toast.success("Produk berhasil diperbarui"); router.push("/admin/produk") }
       else toast.error("Gagal memperbarui produk")
@@ -111,10 +110,6 @@ export default function EditProductPage() {
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Nama Produk *</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi</label>
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none resize-none" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Harga (Rp) *</label>

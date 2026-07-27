@@ -8,7 +8,7 @@ export async function getReportData(params: {
   endDate?: string
 }) {
   const productWhere: Record<string, unknown> = {}
-  const storeWhere: Record<string, unknown> = {}
+  const storeWhere: Record<string, unknown> = { isActive: true }
 
   if (params.storeId) {
     productWhere.storeId = params.storeId

@@ -33,55 +33,141 @@ export default function LaporanPage() {
       const data = await res.json()
 
       const doc = new jsPDF("portrait", "mm", "a4")
+      const pw = doc.internal.pageSize.getWidth()
+      const ph = doc.internal.pageSize.getHeight()
+      const clr = { primary: [52, 20, 82] as [number, number, number], accent: [16, 185, 129] as [number, number, number], dark: [30, 30, 30] as [number, number, number], muted: [120, 120, 120] as [number, number, number], light: [245, 245, 250] as [number, number, number] }
 
-      doc.setFontSize(18)
-      doc.setTextColor(52, 20, 82)
-      doc.text("LAPORAN UMKM", 14, 22)
+      const addFooter = () => {
+        const pageCount = doc.getNumberOfPages()
+        for (let i = 1; i <= pageCount; i++) {
+          doc.setPage(i)
+          doc.setDrawColor(...clr.primary)
+          doc.setLineWidth(0.3)
+          doc.line(14, ph - 14, pw - 14, ph - 14)
+          doc.setFontSize(7)
+          doc.setTextColor(...clr.muted)
+          doc.text(`Laporan UMKM Patakaharja — Halaman ${i} dari ${pageCount}`, 14, ph - 9)
+          doc.text(`Dicetak: ${new Date().toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "numeric" })}`, pw - 14, ph - 9, { align: "right" })
+        }
+      }
+
+      // ── COVER / HEADER ──
+      doc.setFillColor(...clr.primary)
+      doc.rect(0, 0, pw, 52, "F")
+      doc.setFillColor(...clr.accent)
+      doc.rect(0, 52, pw, 3, "F")
+      doc.setTextColor(255, 255, 255)
+      doc.setFontSize(24)
+      doc.text("LAPORAN UMKM", pw / 2, 26, { align: "center" })
       doc.setFontSize(10)
-      doc.setTextColor(100)
-      doc.text("UMKM Patakaharja — Desa Patakaharja, Kec. Cilimus, Kab. Kuningan", 14, 30)
-
-      doc.setFontSize(9)
-      doc.setTextColor(130)
+      doc.text("DESA PATAKAHARJA — KECAMATAN RANCAH — KABUPATEN CIAMIS", pw / 2, 36, { align: "center" })
+      doc.setFontSize(8)
+      doc.text("Laporan data UMKM, produk, dan statistik", pw / 2, 43, { align: "center" })
+      doc.setFillColor(255, 255, 255)
       const dateStr = startDate || endDate ? `${startDate || "—"} s/d ${endDate || "—"}` : "Semua waktu"
-      doc.text(`Periode: ${dateStr}`, 14, 36)
-      doc.text(`Tanggal cetak: ${new Date().toLocaleDateString("id-ID")}`, 14, 41)
+      doc.text(`Periode: ${dateStr}`, pw / 2, 48, { align: "center" })
 
-      doc.setDrawColor(52, 20, 82)
-      doc.setLineWidth(0.5)
-      doc.line(14, 44, 196, 44)
+      // ── INFO BAR ──
+      let yPos = 66
+      doc.setFillColor(...clr.light)
+      doc.roundedRect(14, yPos, pw - 28, 14, 2, 2, "F")
+      doc.setFontSize(8)
+      doc.setTextColor(...clr.muted)
+      doc.text(`Tanggal Cetak: ${new Date().toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })}`, 20, yPos + 6)
+      doc.text(`Filter UMKM: ${stores.find((s) => s.id === selectedStoreId)?.name || "Semua UMKM"}`, 20, yPos + 11)
+      doc.text(`Periode: ${dateStr}`, pw / 2 + 10, yPos + 6)
+      doc.text(`Total Data: ${data.stores?.length || 0} UMKM, ${data.products?.length || 0} Produk`, pw / 2 + 10, yPos + 11)
 
-      let yPos = 50
-      doc.setFontSize(12)
-      doc.setTextColor(52, 20, 82)
-      doc.text("Ringkasan", 14, yPos)
-      yPos += 6
+      // ── SECTION: RINGKASAN ──
+      yPos = 91
+      doc.setFillColor(...clr.primary)
+      doc.roundedRect(14, yPos, pw - 28, 9, 2, 2, "F")
+      doc.setTextColor(255, 255, 255)
+      doc.setFontSize(11)
+      doc.text("RINGKASAN", 20, yPos + 6.5)
+      yPos += 15
 
       const ringkasanData: string[][] = [
-        ["Total UMKM", String(data.stats?.totalStores || 0)],
-        ["Total Produk", String(data.stats?.totalProducts || 0)],
-        ["Total Kategori", String(data.stats?.totalCategories || 0)],
-        ["Produk dalam laporan", String(data.products?.length || 0)],
+        ["Total UMKM Aktif", String(data.stats?.totalStores || 0)],
+        ["Total Produk Aktif", String(data.stats?.totalProducts || 0)],
+        ["Total Kategori Aktif", String(data.stats?.totalCategories || 0)],
+        ["Produk dalam Laporan", String(data.products?.length || 0)],
       ]
-      autoTable(doc, { startY: yPos, head: [["Item", "Jumlah"]], body: ringkasanData, theme: "striped", headStyles: { fillColor: [52, 20, 82], textColor: 255, fontSize: 9 }, bodyStyles: { fontSize: 9 }, margin: { left: 14 }, tableWidth: 80 })
+      autoTable(doc, {
+        startY: yPos,
+        head: [["Indikator", "Jumlah"]],
+        body: ringkasanData,
+        theme: "grid",
+        headStyles: { fillColor: [...clr.primary], textColor: 255, fontSize: 9, fontStyle: "bold", halign: "center" },
+        bodyStyles: { fontSize: 9, textColor: [...clr.dark] },
+        columnStyles: { 0: { cellWidth: 80 }, 1: { cellWidth: 30, halign: "center", fontStyle: "bold" } },
+        margin: { left: 20, right: 20 },
+        tableWidth: 130,
+      })
+      yPos = (doc as any).lastAutoTable.finalY + 14
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      yPos = (doc as any).lastAutoTable.finalY + 12
-
+      // ── SECTION: DAFTAR UMKM ──
       if (data.stores?.length > 0) {
-        doc.setFontSize(12); doc.setTextColor(52, 20, 82); doc.text("Daftar UMKM", 14, yPos); yPos += 6
-        const storeRows: string[][] = data.stores.map((s: { name: string; _count?: { products: number }; phone?: string }) => [s.name, s._count?.products ? String(s._count.products) : "0", s.phone || "—"])
-        autoTable(doc, { startY: yPos, head: [["Nama UMKM", "Jumlah Produk", "Kontak"]], body: storeRows, theme: "striped", headStyles: { fillColor: [52, 20, 82], textColor: 255, fontSize: 9 }, bodyStyles: { fontSize: 8 }, margin: { left: 14, right: 14 } })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        yPos = (doc as any).lastAutoTable.finalY + 12
+        if (yPos > 240) { doc.addPage(); yPos = 30 }
+        doc.setFillColor(...clr.primary)
+        doc.roundedRect(14, yPos, pw - 28, 9, 2, 2, "F")
+        doc.setTextColor(255, 255, 255)
+        doc.setFontSize(11)
+        doc.text("DAFTAR UMKM", 20, yPos + 6.5)
+        yPos += 15
+
+        const storeRows: string[][] = data.stores.map((s: { name: string; _count?: { products: number }; whatsapp?: string }) => [
+          s.name,
+          String(s._count?.products || 0),
+          s.whatsapp ? `+${s.whatsapp}` : "—",
+        ])
+        autoTable(doc, {
+          startY: yPos,
+          head: [["Nama UMKM", "Jumlah Produk", "Kontak WhatsApp"]],
+          body: storeRows,
+          theme: "grid",
+          headStyles: { fillColor: [...clr.primary], textColor: 255, fontSize: 8, fontStyle: "bold", halign: "center" },
+          bodyStyles: { fontSize: 8, textColor: [...clr.dark] },
+          alternateRowStyles: { fillColor: [248, 248, 253] },
+          columnStyles: { 1: { halign: "center" }, 2: { halign: "center" } },
+          margin: { left: 20, right: 20 },
+        })
+        yPos = (doc as any).lastAutoTable.finalY + 14
       }
 
+      // ── SECTION: DAFTAR PRODUK ──
       if (data.products?.length > 0) {
-        if (yPos > 250) { doc.addPage(); yPos = 20 }
-        doc.setFontSize(12); doc.setTextColor(52, 20, 82); doc.text("Daftar Produk", 14, yPos); yPos += 6
-        const productRows: string[][] = data.products.map((p: { name: string; store?: { name: string }; category?: { name: string }; price: { toString: () => string }; stock: number; isActive: boolean }) => [p.name, p.store?.name || "—", p.category?.name || "—", `Rp ${Number(p.price).toLocaleString("id-ID")}`, String(p.stock), p.isActive ? "Aktif" : "Nonaktif"])
-        autoTable(doc, { startY: yPos, head: [["Produk", "UMKM", "Kategori", "Harga", "Stok", "Status"]], body: productRows, theme: "striped", headStyles: { fillColor: [52, 20, 82], textColor: 255, fontSize: 8 }, bodyStyles: { fontSize: 7 }, margin: { left: 14, right: 14 } })
+        if (yPos > 240) { doc.addPage(); yPos = 30 }
+        doc.setFillColor(...clr.primary)
+        doc.roundedRect(14, yPos, pw - 28, 9, 2, 2, "F")
+        doc.setTextColor(255, 255, 255)
+        doc.setFontSize(11)
+        doc.text("DAFTAR PRODUK", 20, yPos + 6.5)
+        yPos += 15
+
+        const productRows: string[][] = data.products.map((p: { name: string; store?: { name: string }; category?: { name: string }; price: { toString: () => string }; stock: number; isActive: boolean }) => [
+          p.name,
+          p.store?.name || "—",
+          p.category?.name || "—",
+          `Rp ${Number(p.price).toLocaleString("id-ID")}`,
+          String(p.stock),
+          p.isActive ? "Aktif" : "Nonaktif",
+        ])
+        autoTable(doc, {
+          startY: yPos,
+          head: [["Produk", "UMKM", "Kategori", "Harga", "Stok", "Status"]],
+          body: productRows,
+          theme: "grid",
+          headStyles: { fillColor: [...clr.primary], textColor: 255, fontSize: 7, fontStyle: "bold", halign: "center" },
+          bodyStyles: { fontSize: 7, textColor: [...clr.dark] },
+          alternateRowStyles: { fillColor: [248, 248, 253] },
+          columnStyles: { 3: { halign: "right" }, 4: { halign: "center" }, 5: { halign: "center", cellWidth: 16 } },
+          margin: { left: 20, right: 20 },
+        })
       }
+
+      // ── PAGE NUMBERS & FOOTER ──
+      addFooter()
 
       doc.save(`laporan-umkm-pataka-${new Date().toISOString().split("T")[0]}.pdf`)
       toast.success("PDF berhasil diunduh")

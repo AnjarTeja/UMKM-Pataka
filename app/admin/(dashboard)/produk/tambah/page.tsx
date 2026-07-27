@@ -20,7 +20,6 @@ export default function AddProductPage() {
   const [uploading, setUploading] = useState(false)
 
   const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
   const [price, setPrice] = useState("")
   const [stock, setStock] = useState("0")
   const [unit, setUnit] = useState("pcs")
@@ -68,7 +67,7 @@ export default function AddProductPage() {
       const res = await fetch("/api/admin/produk", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description, price: Number(price), stock: Number(stock), unit, isFeatured, storeId, categoryId, images: images.map((img) => ({ url: img.url, alt: img.alt, isPrimary: img.isPrimary })) }),
+        body: JSON.stringify({ name, price: Number(price), stock: Number(stock), unit, isFeatured, storeId, categoryId, images: images.map((img) => ({ url: img.url, alt: img.alt, isPrimary: img.isPrimary })) }),
       })
       if (res.ok) { toast.success("Produk berhasil ditambahkan"); router.push("/admin/produk") }
       else {
@@ -102,10 +101,6 @@ export default function AddProductPage() {
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Nama Produk *</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Nama produk" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi</label>
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none resize-none" placeholder="Deskripsi produk" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Harga (Rp) *</label>

@@ -23,10 +23,13 @@ export default function EditStorePage() {
   const [isActive, setIsActive] = useState(true)
 
   useEffect(() => {
-    fetch(`/api/admin/umkm/${id}`).then((r) => r.json()).then((store) => {
-      setName(store.name); setDescription(store.description || ""); setAddress(store.address || "")
-      setWhatsapp(store.whatsapp || ""); setIsActive(store.isActive); setFetchLoading(false)
-    })
+    fetch(`/api/admin/umkm/${id}`)
+      .then((r) => { if (!r.ok) throw new Error(); return r.json() })
+      .then((store) => {
+        setName(store.name); setDescription(store.description || ""); setAddress(store.address || "")
+        setWhatsapp(store.whatsapp || ""); setIsActive(store.isActive); setFetchLoading(false)
+      })
+      .catch(() => { toast.error("Gagal memuat data UMKM"); setFetchLoading(false) })
   }, [id])
 
   const handleSubmit = async (e: React.FormEvent) => {
