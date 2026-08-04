@@ -1,6 +1,6 @@
 "use client"
 
-import { MessageCircle } from "lucide-react"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import { formatPrice } from "@/lib/utils"
 
@@ -74,7 +74,7 @@ export default function ProductCard({ product, index }: Props) {
             onClick={() => waOrder(product)}
             className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-green-500 text-white text-xs font-semibold hover:bg-green-600 transition-all active:scale-90 shadow-sm"
           >
-            <MessageCircle className="h-4 w-4" />
+            <Image src="/whatsapp-logo.png" alt="WhatsApp" width={16} height={16} className="h-4 w-4" />
             Pesan WA
           </button>
         </div>

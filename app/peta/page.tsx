@@ -2,8 +2,8 @@ import { Metadata } from "next"
 import MapSection from "@/components/map-section"
 
 export const metadata: Metadata = {
-  title: "Peta Lokasi UMKM — Patakaharja",
-  description: "Temukan lokasi UMKM di Desa Patakaharja dan kunjungi langsung para pengrajin.",
+  title: "Peta Lokasi Desa — Patakaharja",
+  description: "Temukan lokasi Desa Patakaharja dan kunjungi langsung para pengrajin.",
 }
 
 export default function PetaPage() {

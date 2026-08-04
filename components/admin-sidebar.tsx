@@ -2,12 +2,13 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   LayoutDashboard,
   ShoppingBag,
   Store,
   FileText,
+  X,
 } from "lucide-react"
 
 const sidebarLinks = [
@@ -17,17 +18,18 @@ const sidebarLinks = [
   { label: "Laporan", href: "/admin/laporan", icon: FileText },
 ]
 
-export default function AdminSidebar() {
+interface Props {
+  open: boolean
+  onClose: () => void
+}
+
+export default function AdminSidebar({ open, onClose }: Props) {
   const pathname = usePathname()
 
-  return (
-    <aside className="w-64 bg-[#341452] flex flex-col">
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="p-6 border-b border-white/10"
-      >
-        <Link href="/admin" className="flex items-center gap-2">
+  const content = (
+    <aside className="w-64 bg-[#341452] flex flex-col h-full">
+      <div className="p-6 border-b border-white/10 flex items-center justify-between">
+        <Link href="/admin" className="flex items-center gap-2" onClick={onClose}>
           <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center">
             <Store className="h-4 w-4 text-white" />
           </div>
@@ -36,7 +38,13 @@ export default function AdminSidebar() {
             <p className="text-white/40 text-[10px] leading-tight -mt-0.5">Panel Admin</p>
           </div>
         </Link>
-      </motion.div>
+        <button
+          onClick={onClose}
+          className="md:hidden p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-all"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
 
       <nav className="flex-1 p-3 space-y-1">
         {sidebarLinks.map((link, i) => {
@@ -51,6 +59,7 @@ export default function AdminSidebar() {
             >
               <Link
                 href={link.href}
+                onClick={onClose}
                 className={`relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                   isActive
                     ? "text-white"
@@ -74,5 +83,39 @@ export default function AdminSidebar() {
         })}
       </nav>
     </aside>
+  )
+
+  return (
+    <>
+      {/* Desktop: fixed sidebar */}
+      <div className="hidden md:flex fixed inset-y-0 left-0 z-40 w-64">
+        {content}
+      </div>
+
+      {/* Mobile: overlay drawer */}
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-50 bg-black/50 md:hidden"
+              onClick={onClose}
+            />
+            <motion.div
+              initial={{ x: -256 }}
+              animate={{ x: 0 }}
+              exit={{ x: -256 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed inset-y-0 left-0 z-50 w-64 md:hidden"
+            >
+              {content}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   )
 }

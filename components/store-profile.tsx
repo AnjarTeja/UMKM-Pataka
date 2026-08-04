@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Store, MapPin, Phone, MessageCircle, Package, Loader2 } from "lucide-react"
+import { Store, MapPin, Phone, Package, Loader2 } from "lucide-react"
+import Image from "next/image"
 import { motion } from "framer-motion"
 
 interface StoreItem {
@@ -116,7 +117,7 @@ export default function StoreProfile() {
                       onClick={() => waChat(s)}
                       className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-green-500 text-white text-sm font-semibold hover:bg-green-600 transition-all active:scale-[0.98] shadow-sm"
                     >
-                      <MessageCircle className="h-4 w-4" />
+                      <Image src="/whatsapp-logo.png" alt="WhatsApp" width={16} height={16} className="h-4 w-4" />
                       Hubungi via WhatsApp
                     </button>
                   )}

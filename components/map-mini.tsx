@@ -5,8 +5,8 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { MapPin, ArrowRight, Maximize2 } from "lucide-react"
 
-const CENTER_LAT = -7.1687
-const CENTER_LNG = 108.5052
+const CENTER_LAT = -7.1645109
+const CENTER_LNG = 108.5093862
 
 export default function MapMini() {
   const [mounted, setMounted] = useState(false)
@@ -38,10 +38,10 @@ export default function MapMini() {
           <div>
             <span className="text-xs font-semibold text-primary uppercase tracking-widest flex items-center gap-1.5 mb-1">
               <MapPin className="h-4 w-4" />
-              Eksplorasi Lokasi
+              Lokasi Desa
             </span>
             <h2 className="font-heading text-2xl font-semibold text-primary">
-              Temukan UMKM di Peta
+              Lokasi Desa Patakaharja
             </h2>
           </div>
           <Link

@@ -14,7 +14,7 @@ export default function AdminFooter() {
   }
 
   return (
-    <div className="border-t border-gray-200 bg-white px-6 py-3 flex items-center justify-between">
+    <div className="border-t border-gray-200 bg-white px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-2">
       <p className="text-xs text-gray-400">
         &copy; {new Date().getFullYear()} UMKM Patakaharja
       </p>

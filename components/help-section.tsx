@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { HelpCircle, MessageCircle, ChevronDown, ShoppingBag, MapPin, Phone } from "lucide-react"
+import Image from "next/image"
 
 const faqs = [
   {
@@ -17,7 +18,7 @@ const faqs = [
   },
   {
     q: "Bisa kunjungi langsung lokasi UMKM?",
-    a: "Tentu! Silakan lihat Peta Lokasi UMKM untuk menemukan alamat dan mengunjungi langsung para pengrajin di Desa Patakaharja.",
+    a: "Tentu! Silakan lihat Peta Lokasi Desa untuk menemukan alamat dan mengunjungi langsung para pengrajin di Desa Patakaharja.",
     icon: MapPin,
   },
   {
@@ -103,12 +104,12 @@ export default function HelpSection() {
           Masih punya pertanyaan? Hubungi kami langsung
         </p>
         <a
-          href="https://wa.me/6282316627926?text=Halo%20saya%20butuh%20bantuan"
+          href="https://wa.me/6282316627916?text=Halo%20saya%20butuh%20bantuan"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-green-500 text-white text-sm font-semibold hover:bg-green-600 transition-all active:scale-95 shadow-sm"
         >
-          <MessageCircle className="h-4 w-4" />
+          <Image src="/whatsapp-logo.png" alt="WhatsApp" width={16} height={16} className="h-4 w-4" />
           Hubungi via WhatsApp
         </a>
       </div>

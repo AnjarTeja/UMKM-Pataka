@@ -1,10 +1,11 @@
 "use client"
 
-import { Share2, Mail, Heart, MapPin, Phone, Home, Store, Package, MapPinIcon, HelpCircle } from "lucide-react"
+import { Share2, Mail, Heart, MapPin, Home, Store, Package, MapPinIcon, HelpCircle, LogIn } from "lucide-react"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 
-const WA_NUMBER = "6281234567890"
+const WA_NUMBER = "6282316627916"
 
 export default function Footer() {
   const pathname = usePathname()
@@ -74,7 +75,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="text-primary-fixed-dim/70 text-sm hover:text-white transition-colors flex items-center gap-2"
           >
-            <Phone className="h-3.5 w-3.5" />
+            <Image src="/whatsapp-logo.png" alt="WhatsApp" width={14} height={14} className="h-3.5 w-3.5" />
             Hubungi Artisan
           </a>
           <a
@@ -98,7 +99,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="h-10 w-10 rounded-full border border-primary-fixed-dim/30 flex items-center justify-center text-primary-fixed-dim hover:bg-white/10 hover:text-white transition-all active:scale-90"
             >
-              <Phone className="h-4 w-4" />
+              <Image src="/whatsapp-logo.png" alt="WhatsApp" width={16} height={16} className="h-4 w-4" />
             </a>
             <a
               href="mailto:umkmpataka2026@gmail.com"
@@ -121,6 +122,13 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Patakaharja UMKM. All rights
             reserved.
           </p>
+          <Link
+            href="/admin/login"
+            className="flex items-center gap-1.5 text-primary-fixed-dim/40 text-[10px] hover:text-white/60 transition-colors mt-1"
+          >
+            <LogIn className="h-3 w-3" />
+            Admin
+          </Link>
         </div>
       </div>
     </footer>
