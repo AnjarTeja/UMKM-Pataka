@@ -23,4 +23,3 @@ if (process.env.NODE_ENV !== "production") {
   globalThis.prismaGlobal = prisma
 }
 
-// trigger rebuild
