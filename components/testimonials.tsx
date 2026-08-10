@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
-import { formatPrice } from "@/lib/utils"
+import { formatPrice, normalizeWaNumber } from "@/lib/utils"
 
 interface ProductItem {
   id: string
@@ -19,7 +19,7 @@ interface ProductItem {
 }
 
 function waOrder(product: ProductItem) {
-  const waNumber = product.storeWhatsapp || "6281234567890"
+  const waNumber = normalizeWaNumber(product.storeWhatsapp) || "6281234567890"
   const msg = encodeURIComponent(
     `Halo, saya tertarik dengan produk *${product.name}* (${product.store}) seharga ${formatPrice(product.price)}. Apakah masih tersedia?`
   )

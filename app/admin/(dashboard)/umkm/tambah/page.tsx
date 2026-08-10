@@ -65,7 +65,8 @@ export default function AddStorePage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">No. WhatsApp</label>
-                  <input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Contoh: 62812xxxx" />
+                  <input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none" placeholder="Contoh: 081234567890" />
+                  <p className="text-xs text-gray-400 mt-1">Boleh diisi 08xxx atau 628xxx, otomatis dikonversi ke format internasional.</p>
                 </div>
               </div>
             </div>

@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { formatPrice } from "@/lib/utils"
+import { formatPrice, normalizeWaNumber } from "@/lib/utils"
 
 export interface ProductData {
   id?: string
@@ -21,7 +21,7 @@ interface Props {
 }
 
 function waOrder(product: ProductData) {
-  const waNumber = product.storeWhatsapp || "6281234567890"
+  const waNumber = normalizeWaNumber(product.storeWhatsapp) || "6281234567890"
   const msg = encodeURIComponent(
     `Halo, saya tertarik dengan produk *${product.name}* (${product.category}) seharga ${formatPrice(product.price)}. Apakah masih tersedia?`
   )

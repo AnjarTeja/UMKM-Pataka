@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Store, MapPin, Phone, Package, Loader2 } from "lucide-react"
 import Image from "next/image"
 import { motion } from "framer-motion"
+import { normalizeWaNumber } from "@/lib/utils"
 
 interface StoreItem {
   id: string
@@ -26,7 +27,7 @@ const AVATAR_COLORS = [
 ]
 
 function waChat(store: StoreItem) {
-  const waNumber = store.whatsapp || "6281234567890"
+  const waNumber = normalizeWaNumber(store.whatsapp) || "6281234567890"
   const msg = encodeURIComponent(
     `Halo, saya tertarik dengan produk dari *${store.name}*. Apakah masih tersedia?`
   )

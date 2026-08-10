@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { deleteFile } from "@/lib/supabase-storage"
+import { normalizeWaNumber } from "@/lib/utils"
 import { revalidatePath } from "next/cache"
 
 function slugify(text: string) {
@@ -64,7 +65,7 @@ export async function createStore(data: {
       slug,
       description: data.description,
       address: data.address,
-      whatsapp: data.whatsapp,
+      whatsapp: data.whatsapp ? normalizeWaNumber(data.whatsapp) : data.whatsapp,
       user: {
         create: {
           name: data.sellerName,
@@ -113,7 +114,7 @@ export async function updateStore(
       slug,
       description: data.description,
       address: data.address,
-      whatsapp: data.whatsapp,
+      whatsapp: data.whatsapp ? normalizeWaNumber(data.whatsapp) : data.whatsapp,
       isActive: data.isActive,
     },
   })
