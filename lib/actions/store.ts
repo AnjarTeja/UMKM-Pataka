@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma"
 import bcrypt from "bcryptjs"
+import { deleteFile } from "@/lib/supabase-storage"
 import { revalidatePath } from "next/cache"
 
 function slugify(text: string) {
@@ -123,10 +124,32 @@ export async function updateStore(
 }
 
 export async function deleteStore(id: string) {
-  await prisma.store.update({
+  const store = await prisma.store.findUnique({
     where: { id },
-    data: { isActive: false },
+    include: {
+      galleries: { select: { url: true } },
+      products: { include: { images: { select: { url: true } } } },
+    },
   })
+  if (!store) throw new Error("UMKM tidak ditemukan")
+
+  await prisma.store.delete({ where: { id } })
+
+  const remainingStores = await prisma.store.count({ where: { userId: store.userId } })
+  if (remainingStores === 0) {
+    await prisma.user.delete({ where: { id: store.userId } }).catch(() => {})
+  }
+
+  const imageUrls = [
+    store.logo,
+    store.banner,
+    ...store.galleries.map((g) => g.url),
+    ...store.products.flatMap((p) => p.images.map((img) => img.url)),
+  ].filter((url): url is string => Boolean(url))
+
+  for (const url of imageUrls) {
+    await deleteFile(url).catch(() => {})
+  }
 
   revalidatePath("/admin/umkm")
   revalidatePath("/profil")

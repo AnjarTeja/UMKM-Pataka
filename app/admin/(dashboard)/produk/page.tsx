@@ -55,14 +55,14 @@ export default function AdminProductsPage() {
     try {
       const res = await fetch(`/api/admin/produk/${id}`, { method: "DELETE" })
       if (res.ok) {
-        toast.success("Produk dinonaktifkan")
+        toast.success("Produk berhasil dihapus")
         setDeleteId(null)
         if (products.length === 1 && page > 1) {
           setPage((p) => p - 1)
         }
         setRefreshKey((k) => k + 1)
       } else {
-        toast.error("Gagal menonaktifkan produk")
+        toast.error("Gagal menghapus produk")
       }
     } catch {
       toast.error("Terjadi kesalahan")
@@ -287,7 +287,7 @@ export default function AdminProductsPage() {
           {deleteId && (
             <ModalBackdrop>
               <h3 className="font-heading font-semibold text-lg text-[#1a1a1a] mb-2">Hapus Produk?</h3>
-              <p className="text-gray-500 text-sm mb-6">Produk akan dinonaktifkan, bukan dihapus permanen.</p>
+              <p className="text-gray-500 text-sm mb-6">Produk beserta gambarnya akan dihapus permanen dari website dan database. Tindakan ini tidak dapat dibatalkan.</p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setDeleteId(null)}
@@ -299,7 +299,7 @@ export default function AdminProductsPage() {
                   onClick={() => handleDelete(deleteId)}
                   className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-sm font-medium text-white hover:bg-red-700 transition-all"
                 >
-                  Nonaktifkan
+                  Hapus
                 </button>
               </div>
             </ModalBackdrop>

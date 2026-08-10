@@ -1,11 +1,11 @@
 "use client"
 
-import { Share2, Mail, Heart, MapPin, Home, Store, Package, MapPinIcon, HelpCircle, LogIn } from "lucide-react"
+import { Share2, Heart, MapPin, Home, Store, Package, MapPinIcon, HelpCircle, LogIn } from "lucide-react"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 
-const WA_NUMBER = "6282316627916"
+const WA_NUMBER = "6282316627926"
 
 export default function Footer() {
   const pathname = usePathname()
@@ -100,12 +100,6 @@ export default function Footer() {
               className="h-10 w-10 rounded-full border border-primary-fixed-dim/30 flex items-center justify-center text-primary-fixed-dim hover:bg-white/10 hover:text-white transition-all active:scale-90"
             >
               <Image src="/whatsapp-logo.png" alt="WhatsApp" width={16} height={16} className="h-4 w-4" />
-            </a>
-            <a
-              href="mailto:umkmpataka2026@gmail.com"
-              className="h-10 w-10 rounded-full border border-primary-fixed-dim/30 flex items-center justify-center text-primary-fixed-dim hover:bg-white/10 hover:text-white transition-all active:scale-90"
-            >
-              <Mail className="h-4 w-4" />
             </a>
             <button
               onClick={() => {

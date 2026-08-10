@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
@@ -30,8 +31,14 @@ export default function AdminSidebar({ open, onClose }: Props) {
     <aside className="w-64 bg-[#341452] flex flex-col h-full">
       <div className="p-6 border-b border-white/10 flex items-center justify-between">
         <Link href="/admin" className="flex items-center gap-2" onClick={onClose}>
-          <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center">
-            <Store className="h-4 w-4 text-white" />
+          <div className="w-7 h-11 flex items-center justify-center shrink-0">
+            <Image
+              src="/images/Logo-Kabupaten-Ciamis.png"
+              alt="Logo Kabupaten Ciamis"
+              width={500}
+              height={782}
+              className="h-full w-auto object-contain"
+            />
           </div>
           <div>
             <span className="font-heading text-lg font-bold text-white">Patakaharja</span>

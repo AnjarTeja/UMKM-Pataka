@@ -1,6 +1,7 @@
 "use server"
 
 import prisma from "@/lib/prisma"
+import { deleteFile } from "@/lib/supabase-storage"
 import { revalidatePath } from "next/cache"
 
 function slugify(text: string) {
@@ -171,10 +172,17 @@ export async function updateProduct(
 }
 
 export async function deleteProduct(id: string) {
-  await prisma.product.update({
+  const product = await prisma.product.findUnique({
     where: { id },
-    data: { isActive: false },
+    include: { images: { select: { url: true } } },
   })
+  if (!product) throw new Error("Produk tidak ditemukan")
+
+  await prisma.product.delete({ where: { id } })
+
+  for (const image of product.images) {
+    await deleteFile(image.url).catch(() => {})
+  }
 
   revalidatePath("/admin/produk")
   revalidatePath("/produk")
