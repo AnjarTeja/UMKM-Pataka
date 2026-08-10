@@ -58,7 +58,7 @@ function placeholder(text: string, width = 800, height = 600): string {
   return `https://placehold.co/${width}x${height}/png?text=${encodeURIComponent(text)}`
 }
 
-const CATEGORY_NAMES = ["Fashion", "Kriya", "Makanan Ringan", "Makanan", "Jasa Menjahit"]
+const CATEGORY_NAMES = ["Fashion", "Kriya", "Makanan Ringan", "Makanan", "Jasa"]
 
 const STORES: StoreSeed[] = [
   {
@@ -498,7 +498,7 @@ const STORES: StoreSeed[] = [
   },
   {
     name: "Imas M",
-    category: "Jasa Menjahit",
+    category: "Jasa",
     description:
       "UMKM yang bergerak di bidang jasa menjahit dan melayani berbagai kebutuhan jahit masyarakat. Mengutamakan ketelitian, kerapian, dan kualitas hasil jahitan sehingga dapat digunakan untuk kebutuhan pakaian, perbaikan pakaian, maupun pesanan jahit sesuai kebutuhan pelanggan.",
     products: [

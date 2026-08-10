@@ -44,7 +44,7 @@ export default function CategoryGrid() {
         variants={container}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, margin: "-60px" }}
+        viewport={{ once: true, amount: 0.2 }}
         className="grid grid-cols-2 md:grid-cols-4 gap-6"
       >
         {categories.map((cat) => {

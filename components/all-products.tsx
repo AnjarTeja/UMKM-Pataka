@@ -50,17 +50,17 @@ export default function AllProducts() {
           <h1 className="font-heading text-4xl font-bold text-primary">Semua Produk</h1>
           <p className="text-on-surface-variant mt-1">Pesan langsung via WhatsApp — tanpa ribet</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="bg-surface rounded-2xl overflow-hidden border border-outline-variant/20">
-              <div className="h-64 bg-surface-container animate-pulse" />
-              <div className="p-5 space-y-3">
+              <div className="h-40 sm:h-64 bg-surface-container animate-pulse" />
+              <div className="p-3 sm:p-5 space-y-2 sm:space-y-3">
                 <div className="h-3 w-20 bg-surface-container animate-pulse rounded" />
                 <div className="h-3 w-16 bg-surface-container animate-pulse rounded" />
-                <div className="h-5 w-40 bg-surface-container animate-pulse rounded" />
+                <div className="h-5 w-24 sm:w-40 bg-surface-container animate-pulse rounded" />
                 <div className="flex justify-between items-center">
-                  <div className="h-6 w-24 bg-surface-container animate-pulse rounded" />
-                  <div className="h-9 w-24 bg-surface-container animate-pulse rounded-lg" />
+                  <div className="h-5 w-16 sm:h-6 sm:w-24 bg-surface-container animate-pulse rounded" />
+                  <div className="h-8 w-16 sm:h-9 sm:w-24 bg-surface-container animate-pulse rounded-lg" />
                 </div>
               </div>
             </div>
@@ -117,7 +117,7 @@ export default function AllProducts() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -16 }}
           transition={{ duration: 0.3 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6"
         >
           {filtered.map((product, i) => (
             <ProductCard

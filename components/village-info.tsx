@@ -42,18 +42,38 @@ const timeline = [
   },
 ]
 
+const factContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+}
+
+const factItem = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" as const } },
+}
+
+const timelineContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+}
+
+const timelineItem = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" as const } },
+}
+
 export default function VillageInfo() {
   return (
     <section className="max-w-[1400px] mx-auto px-6 mt-16">
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
+          initial={{ opacity: 0, x: -24 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, ease: "easeOut" as const }}
           className="lg:col-span-3"
         >
-          <div className="relative rounded-2xl overflow-hidden clay-shadow border border-outline-variant/20">
+          <div className="relative rounded-2xl overflow-hidden clay-shadow border border-outline-variant/20 bg-surface-container">
             <img
               src="/images/sekilas-desa.jpg"
               alt="Suasana Desa Patakaharja"
@@ -71,10 +91,10 @@ export default function VillageInfo() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, x: 30 }}
+          initial={{ opacity: 0, x: 24 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.15 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" as const }}
           className="lg:col-span-2"
         >
           <span className="text-xs font-semibold text-primary uppercase tracking-widest flex items-center gap-1.5 mb-2">
@@ -106,16 +126,19 @@ export default function VillageInfo() {
             mengenakan pakaian beludru dan topi laken.
           </p>
 
-          <div className="grid grid-cols-2 gap-3">
-            {facts.map((f, i) => {
+          <motion.div
+            variants={factContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid grid-cols-2 gap-3"
+          >
+            {facts.map((f) => {
               const Icon = f.icon
               return (
                 <motion.div
                   key={f.label}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: 0.2 + i * 0.06 }}
+                  variants={factItem}
                   className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/20 clay-shadow"
                 >
                   <div className="flex items-center gap-3">
@@ -132,16 +155,16 @@ export default function VillageInfo() {
                 </motion.div>
               )
             })}
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
       <div className="mt-16">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.4, ease: "easeOut" as const }}
           className="flex items-center gap-2 mb-8"
         >
           <Flag className="h-4 w-4 text-primary" />
@@ -150,14 +173,17 @@ export default function VillageInfo() {
           </h3>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {timeline.map((item, i) => (
+        <motion.div
+          variants={timelineContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          {timeline.map((item) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
+              variants={timelineItem}
               className="relative bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/20 clay-shadow"
             >
               <span className="inline-block px-2.5 py-1 rounded-full bg-primary-fixed text-primary text-[11px] font-bold uppercase tracking-wide mb-3">
@@ -171,7 +197,7 @@ export default function VillageInfo() {
               </p>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         <p className="mt-6 text-on-surface-variant text-xs leading-relaxed flex items-start gap-2">
           <Trees className="h-4 w-4 text-primary shrink-0 mt-0.5" />

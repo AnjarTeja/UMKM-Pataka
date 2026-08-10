@@ -1,5 +1,6 @@
 "use client"
 
+import { MotionConfig } from "framer-motion"
 import { usePathname } from "next/navigation"
 import Navbar from "./navbar"
 import Footer from "./footer"
@@ -13,10 +14,10 @@ export default function PublicLayoutWrapper({ children }: { children: React.Reac
   }
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <Navbar />
       <main className="flex-1 pt-16">{children}</main>
       <Footer />
-    </>
+    </MotionConfig>
   )
 }

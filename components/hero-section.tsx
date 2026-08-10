@@ -1,26 +1,21 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion, useScroll, useTransform } from "framer-motion"
 
 export default function HeroSection() {
-  const [offsetY, setOffsetY] = useState(0)
-
-  useEffect(() => {
-    const onScroll = () => setOffsetY(window.scrollY * 0.3)
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
+  const { scrollY } = useScroll()
+  const offsetY = useTransform(scrollY, [0, 1000], [0, 300])
 
   return (
     <section className="relative h-[500px] md:h-[540px] overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center scale-110"
+      <motion.div
+        className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
             "url('/images/gerabah.png')",
-          transform: `translateY(${offsetY}px) scale(1.1)`,
+          y: offsetY,
+          scale: 1.1,
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/60" />

@@ -61,7 +61,7 @@ export default function StatsCards() {
       variants={container}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
+      viewport={{ once: true, amount: 0.2 }}
       className="max-w-[1400px] mx-auto px-6 mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
     >
       {stats.map((stat) => {

@@ -66,7 +66,7 @@ export default function VillageGallery() {
         variants={container}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, margin: "-40px" }}
+        viewport={{ once: true, amount: 0.2 }}
         className="grid grid-cols-1 sm:grid-cols-2 gap-4"
       >
         {images.map((img, i) => (
