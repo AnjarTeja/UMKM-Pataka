@@ -7,9 +7,7 @@ import { ArrowLeft, Upload, X, Loader2 } from "lucide-react"
 import { PageTransition, SlideIn } from "@/components/admin-page-transition"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
-
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
-const MAX_FILE_SIZE = 20 * 1024 * 1024
+import { uploadProductImage } from "@/lib/client-upload"
 
 interface Category { id: string; name: string }
 interface Store { id: string; name: string }
@@ -21,6 +19,7 @@ export default function AddProductPage() {
   const [stores, setStores] = useState<Store[]>([])
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [progress, setProgress] = useState<number | null>(null)
 
   const [name, setName] = useState("")
   const [price, setPrice] = useState("")
@@ -44,27 +43,15 @@ export default function AddProductPage() {
     if (!files?.length) return
     setUploading(true)
     for (const file of Array.from(files)) {
-      if (!ALLOWED_TYPES.includes(file.type)) {
-        toast.error(`Format ${file.name} tidak didukung. Gunakan: JPG, PNG, atau WebP`)
-        continue
-      }
-      if (file.size > MAX_FILE_SIZE) {
-        toast.error(`Ukuran ${file.name} melebihi 20MB`)
-        continue
-      }
-      const formData = new FormData()
-      formData.append("file", file)
-      formData.append("folder", "produk")
+      setProgress(0)
       try {
-        const res = await fetch("/api/upload", { method: "POST", body: formData })
-        const data = await res.json()
-        if (data.error) {
-          toast.error(data.error)
-          continue
-        }
-        if (data.url) setImages((prev) => [...prev, { url: data.url, alt: "", isPrimary: prev.length === 0 }])
-      } catch { toast.error("Gagal upload gambar") }
+        const url = await uploadProductImage(file, setProgress)
+        setImages((prev) => [...prev, { url, alt: "", isPrimary: prev.length === 0 }])
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Gagal upload gambar")
+      }
     }
+    setProgress(null)
     setUploading(false)
     e.target.value = ""
   }
@@ -175,6 +162,14 @@ export default function AddProductPage() {
                   <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handleFileSelect} className="hidden" disabled={uploading} />
                 </label>
               </div>
+              {uploading && (
+                <div className="w-full max-w-sm mb-3">
+                  <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-violet-500 transition-all duration-200" style={{ width: `${progress ?? 0}%` }} />
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1">Mengunggah gambar... {Math.round(progress ?? 0)}%</p>
+                </div>
+              )}
               <p className="text-xs text-gray-400">Format: JPG, PNG. Klik &quot;Utama&quot; untuk mengatur gambar utama.</p>
             </div>
 
