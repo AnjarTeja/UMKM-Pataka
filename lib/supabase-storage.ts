@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js"
 
 export const SUPABASE_BUCKET = "product-images"
-export const MAX_FILE_SIZE = 5 * 1024 * 1024
+export const MAX_FILE_SIZE = 20 * 1024 * 1024
 
 const ALLOWED_TYPES: Record<string, string> = {
   "image/jpeg": "jpg",
@@ -42,7 +42,7 @@ export async function uploadFile(file: File, folder: string): Promise<string> {
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    throw new Error("Ukuran file maksimal 5MB")
+    throw new Error("Ukuran file maksimal 20MB")
   }
 
   const safeFolder = sanitizeFolder(folder)

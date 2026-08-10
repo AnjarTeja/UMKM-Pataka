@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: "Ukuran file maksimal 5MB" },
+        { error: "Ukuran file maksimal 20MB" },
         { status: 400 }
       )
     }
