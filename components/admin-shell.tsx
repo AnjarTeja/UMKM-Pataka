@@ -18,7 +18,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
       <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="flex flex-col flex-1 min-h-0 md:ml-64">
-        <div className="flex items-center gap-3 px-4 py-3 bg-[#341452] md:hidden">
+        <div className="sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-[#341452] md:hidden shadow-md shadow-black/10">
           <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-all"
