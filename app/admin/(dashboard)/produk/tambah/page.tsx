@@ -8,6 +8,9 @@ import { PageTransition, SlideIn } from "@/components/admin-page-transition"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+const MAX_FILE_SIZE = 5 * 1024 * 1024
+
 interface Category { id: string; name: string }
 interface Store { id: string; name: string }
 interface ImageItem { url: string; file?: File; alt: string; isPrimary: boolean }
@@ -41,12 +44,24 @@ export default function AddProductPage() {
     if (!files?.length) return
     setUploading(true)
     for (const file of Array.from(files)) {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        toast.error(`Format ${file.name} tidak didukung. Gunakan: JPG, PNG, atau WebP`)
+        continue
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error(`Ukuran ${file.name} melebihi 5MB`)
+        continue
+      }
       const formData = new FormData()
       formData.append("file", file)
       formData.append("folder", "produk")
       try {
         const res = await fetch("/api/upload", { method: "POST", body: formData })
         const data = await res.json()
+        if (data.error) {
+          toast.error(data.error)
+          continue
+        }
         if (data.url) setImages((prev) => [...prev, { url: data.url, alt: "", isPrimary: prev.length === 0 }])
       } catch { toast.error("Gagal upload gambar") }
     }
@@ -157,7 +172,7 @@ export default function AddProductPage() {
                 ))}
                 <label className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-200 hover:border-violet-400 hover:bg-violet-50 flex flex-col items-center justify-center cursor-pointer transition-all">
                   {uploading ? <Loader2 className="h-5 w-5 text-gray-400 animate-spin" /> : <><Upload className="h-5 w-5 text-gray-400" /><span className="text-[10px] text-gray-400 mt-1">Upload</span></>}
-                  <input type="file" accept="image/*" multiple onChange={handleFileSelect} className="hidden" disabled={uploading} />
+                  <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handleFileSelect} className="hidden" disabled={uploading} />
                 </label>
               </div>
               <p className="text-xs text-gray-400">Format: JPG, PNG. Klik &quot;Utama&quot; untuk mengatur gambar utama.</p>
